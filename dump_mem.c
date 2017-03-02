@@ -23,7 +23,10 @@ void		dump_mem(void *ptr, int len)
 	{
 		if (i == 0 || i % 32 == 0)
 			printf("%6d | %20p | ", i, ptr);
+		if (mem[i] != 0)
+			printf("\033[31m");
 		printf("%02hhx ", mem[i]);
+		printf("\033[0m");
 		ptr++;
 		i++;
 		if (i == len || i % 32 == 0)
