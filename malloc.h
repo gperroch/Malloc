@@ -42,6 +42,17 @@ typedef struct		s_area
 	size_t			size_data;
 }					t_area;
 
+typedef struct		s_area_v2
+{
+	size_t			size_area;
+	struct s_area	*next;
+	size_t			size_data;
+	bool			full;
+	void			*block[100];
+	size_t			size_block[100];
+}					t_area_v2;
+
+
 void				*malloc(size_t size);
 void				*realloc(void *ptr, size_t size);
 void				dump_mem(void *ptr, int len);

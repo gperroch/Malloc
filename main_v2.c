@@ -104,17 +104,9 @@ static t_area	*ft_mapping(void *ptr, size_t size)
 	first_area.size_area = size_area;
 	first_area.size_data = (size <= TINY) ? TINY : SMALL;
 	first_area.size_data = (size > SMALL) ? size : first_area.size_data;
-	first_area.next = NULL;
-	first_area.free = (size > SMALL) ? 0 : 1;
+//	first_area.next = NULL; //Deja initialiser avec ft_bzero
+	first_area.block[0] = (long)&first_area + sizeof(first_area);
 	*(t_area *)start = first_area;
-
-	//Initialisation de la strucutre du bloc de donnees en question
-	//Mutualisation possible avec ft_new_metadata
-	ft_bzero(&block.size, 32);
-	block.size = size;
-	block.next = NULL;
-	block.free = 1;
-	*((t_block *)(start + sizeof(t_area))) = block;
 
 	return (start);
 }
@@ -144,38 +136,12 @@ void			*malloc(size_t size)
 		ptr_area = ft_find_next_suitable_area(ptr_area, size);
 
 		// mmap une nouvelle zone si necessaire
-		if ((ptr_area->size_data < size || !ptr_area->free) && !ptr_area->next)
+		if ((ptr_area->full || ptr_area->size_data < size) && !ptr_area->next)
 			ptr_area = ft_map_new_area(ptr_area, size);
 
 		ptr_block = ft_find_next_suitable_block(ptr_area, size);
 
-		//Ajout d'un nouveau bloc dans la zone si necessaire
-		// ATTENTION : verifier que le nouveau bloc de data ne depasse pas de la zone
-		printf("[DEBUG] Taille restante : %ld + %ld - (%ld + %ld) = %ld\n", ptr_area->size_area, (long)ptr_area, (long)ptr_block, sizeof(t_block), ptr_area->size_area + (long)ptr_area - ((long)ptr_block + sizeof(t_block)));
-		if ((ptr_block->size < size || !ptr_block->free) && !ptr_block->next && ptr_area->size_area + (long)ptr_area - ((long)ptr_block + sizeof(t_block)) >= size && ptr_area->size_area + (long)ptr_area - ((long)ptr_block + sizeof(t_block)) < ptr_area->size_area)
-		{
-			DEBUG("Ajout d'un nouveau bloc.");
-			ptr_block->next = (t_block *)((char *)ptr_block + ptr_block->size + sizeof(t_block));
-			ptr_block = ptr_block->next;
-			ft_new_metadata(ptr_block, size);
-		}
 
-		//???
-		if (ptr_block->size >= size && ptr_block->free)
-		{
-			DEBUG("Bloc de taille suffisante et libre trouvé.");
-			ptr_block->free = 0;
-		}
-		else
-		{
-			DEBUG("Aucun bloc de taille suffisante et disponible dans cette zone. Passage à la zone suivante.");
-			ptr_block = NULL;
-			// mmap une nouvelle zone si aucun block n'est libre dans celle-ci
-			if (ptr_area->next)
-				ptr_area = ptr_area->next;
-			else
-				ptr_area = ft_map_new_area(ptr_area, size);
-		}
 	}
 	return ((char *)ptr_block + sizeof(t_block));
 }
@@ -184,7 +150,7 @@ static t_area	*ft_find_next_suitable_area(t_area *area, size_t size)
 {
 	DEBUG("Recherche de la zone appropriée.");
 	// Trouver la zone appropriee
-	while ((area->size_data < size || !area->free) && area->next)
+	while (!area->full && (area->size_data < size || !area->free) && area->next)
 		area = area->next;
 
 	return (area);
@@ -193,12 +159,21 @@ static t_area	*ft_find_next_suitable_area(t_area *area, size_t size)
 static t_block	*ft_find_next_suitable_block(t_area *area, size_t size)
 {
 	t_block		*ptr_block;
+	int			count;
 
+	count = -1;
+	ptr_block = NULL;
 	DEBUG("Recherche d'un bloc libre de taille suffisante.");
 	// Trouver un block libre
-	ptr_block = (t_block *)((char *)area + sizeof(t_block)); //sizeof(t_area) ?
-	while ((ptr_block->size < size || !ptr_block->free) && ptr_block->next)
-		ptr_block = ptr_block->next;
+	while (!ptr_block && ++count < 100)
+	{
+		if (area->block[count] && !area->size_block[count])
+		{
+			ptr_block = area->block[count]
+			area->size_block[count] = size;
+		}
+		area->full = count == 99 ? TRUE : FALSE;
+	}
 
 	return (ptr_block);
 }
