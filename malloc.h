@@ -24,6 +24,11 @@
 # define AREA_SMALL (((SMALL + sizeof(t_block)) * 100) + sizeof(t_area))
 # define align4(x) ((((x - 1) >> 2) << 2) + 4)
 
+# define BLOCK_TINY (TINY + sizeof(void*) + sizeof(size_t))
+# define BLOCK_SMALL (SMALL + sizeof(void*) + sizeof(size_t))
+# define AREA_TINY_V2 ((BLOCK_TINY * 100 + sizeof(t_area)))
+# define AREA_SMALL_V2 ((BLOCK_SMALL * 100 + sizeof(t_area)))
+
 typedef struct		s_block
 {
 	size_t			size;
@@ -47,9 +52,7 @@ typedef struct		s_area_v2
 	size_t			size_area;
 	struct s_area	*next;
 	size_t			size_data;
-	bool			full;
-	void			*block[100];
-	size_t			size_block[100];
+	void			*metadata;
 }					t_area_v2;
 
 

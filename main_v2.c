@@ -29,57 +29,15 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-int		ft_new_metadata(void *addr_block, int size)
+static t_area_v2	*ft_mapping(void *ptr, size_t size)
 {
-	t_block		metadata;
+	void			*start;
+	t_area_v2		first_area;
+	t_block			block;
+	int				size_area;
 
-	metadata.size = size;
-	metadata.free = 1;
-	metadata.next = NULL;
-	*(t_block *)addr_block = metadata;
-	return (0);
-}
-
-static int		ft_find_block(void **ptr, size_t size)
-{
-	t_block		*block;
-
-	if (!*ptr)
-		return (-1);
-	block = *ptr + sizeof(t_area);
-	while ((block->size < size || !block->free) && block->next)
-		block = block->next;
-	if ((block->size < size || !block->free) && !block->next) // Aucun block libre
-	{
-		if ((void *)((block + sizeof(t_block)) - ((t_area *)ptr)->size_area) >= (void *)(size + sizeof(t_block)))
-		{
-			ft_new_metadata((block + sizeof(t_block) + block->size), size);
-			block->next = block + sizeof(t_block) + block->size;
-			block = block->next;
-		}
-		else
-		return (-1);
-	}
-	*ptr = (char *)block + sizeof(t_block);
-	block->free = 0;
-/*	if (block->size >= (size + 4 + sizeof(t_block)))
-	{
-		ft_new_metadata((*ptr + size), (block->size - size - sizeof(t_block)));
-		((t_block *)(*ptr + size))->next = block->next;
-		block->next = ((t_block *)(*ptr + size));
-		block->size = size;
-	}*/
-	return (1);
-}
-
-static t_area	*ft_mapping(void *ptr, size_t size)
-{
-	void		*start;
-	t_area		first_area;
-	t_block		block;
-	int			size_area;
-
-	// Sélection de la taille à allouer (TINY, SMALL ou custom pour les plus grandes)
+	// Sélection de la taille à allouer (TINY, SMALL ou custom pour les plus grandes.
+	// Revoir les tailles pour qu'elles soient multiples de 4096. Inclure 4096 dedans idéalement.
 	size_area = (size <= TINY) ? AREA_TINY : AREA_SMALL;
 	size_area = (size > TINY && size <= SMALL) ? AREA_SMALL : size_area;
 	size_area = (size > SMALL) ? (size + sizeof(t_area) + sizeof(t_block)) : size_area;
@@ -105,8 +63,9 @@ static t_area	*ft_mapping(void *ptr, size_t size)
 	first_area.size_data = (size <= TINY) ? TINY : SMALL;
 	first_area.size_data = (size > SMALL) ? size : first_area.size_data;
 //	first_area.next = NULL; //Deja initialiser avec ft_bzero
-	first_area.block[0] = (long)&first_area + sizeof(first_area);
-	*(t_area *)start = first_area;
+	first_area.metadata = (long)&first_area + sizeof(first_area);
+	*(first_area.metadata) = sizeof(t_area) + 100 * (sizeof(void*) + sizeof(size_t)); // Adresse du premier bloc.
+	*(t_area *)start = first_area; // Bizarre.
 
 	return (start);
 }

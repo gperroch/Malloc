@@ -20,7 +20,13 @@ int main(int argc, char **argv)
 	void *ptr2;
 	int i = 0;
 
-	while (i++ < 10)
+	printf("sizeof(void*) = %lu, sizeof(size_t) = %lu, sizeof(t_area) = %lu\n", sizeof(void*), sizeof(size_t), sizeof(t_area));
+	printf("getpagesize() = %d\n", getpagesize());
+	printf("TINY size_area_v1 = %lu, size_area_v2 = %lu\n", AREA_TINY, AREA_TINY_V2);
+	printf("TINY Multiples : v1 = %5f, v2 = %5f\n", (double)((double)AREA_TINY / (double)getpagesize()), (double)((double)AREA_TINY_V2 / (double)getpagesize()));
+	printf("SMALL size_area_v1 = %lu, size_area_v2 = %lu\n", AREA_SMALL, AREA_SMALL_V2);
+	printf("SMALL Multiples : v1 = %5f, v2 = %5f\n", (double)((double)AREA_SMALL / (double)getpagesize()), (double)((double)AREA_SMALL_V2 / (double)getpagesize()));
+	while (i++ > 10)
 	{
 		printf("malloc %d = %p\n", i, ptr1);
 		ptr1 = malloc(atoi(argv[1]));
