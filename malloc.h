@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2016/05/18 15:48:50 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/03/20 10:29:58 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,6 @@
 # define AREA_TINY (((TINY + sizeof(t_block)) * 100) + sizeof(t_area))
 # define AREA_SMALL (((SMALL + sizeof(t_block)) * 100) + sizeof(t_area))
 # define align4(x) ((((x - 1) >> 2) << 2) + 4)
-
-# define BLOCK_TINY (TINY + sizeof(void*) + sizeof(size_t))
-# define BLOCK_SMALL (SMALL + sizeof(void*) + sizeof(size_t))
-# define AREA_TINY_V2 ((BLOCK_TINY * 100 + sizeof(t_area)))
-# define AREA_SMALL_V2 ((BLOCK_SMALL * 100 + sizeof(t_area)))
 
 typedef struct		s_block
 {
@@ -46,15 +41,6 @@ typedef struct		s_area
 	//Taille des donnees (zone - structure d'entete)
 	size_t			size_data;
 }					t_area;
-
-typedef struct		s_area_v2
-{
-	size_t			size_area;
-	struct s_area	*next;
-	size_t			size_data;
-	void			*metadata;
-}					t_area_v2;
-
 
 void				*malloc(size_t size);
 void				*realloc(void *ptr, size_t size);
