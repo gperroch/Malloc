@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/03/22 13:32:02 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/03/28 11:01:32 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,11 @@ void            *malloc(size_t size)
 	if (!start)
 		start = ft_mapping(start, size);
 	if (size == 0)
-		return (start);
+		return (start); // !! A ENLEVER
 	ptr_area = start;
+
+	printf("MAPPING DE START\n");
+	dump_mem(start, 256);
 
 	while (!ptr_block)
 	{
@@ -48,7 +51,11 @@ static t_area	*ft_find_next_suitable_area(t_area *area, size_t size)
     if ((area->size_data < size || !area->free) && !area->next)
     {
         area->next = ft_mapping(area->next, size);
-    	area = area->next;
+	
+		printf("NOUVELLE AREA\n");
+		dump_mem(area, 256);
+    
+		area = area->next;
     }
 
 	return (area);
@@ -69,6 +76,9 @@ static t_block	*ft_find_next_suitable_block(t_area *area, size_t size)
 		ptr_block->next = (t_block *)((char *)ptr_block + ptr_block->size + sizeof(t_block));
 		ptr_block = ptr_block->next;
 		ft_new_metadata(ptr_block, size);
+
+		printf("NOUVELLES METADATA\n");
+		dump_mem(area, 256);
 	}
 
 	return (ptr_block);
