@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/03/20 10:29:58 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/03/22 13:30:11 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int					ft_new_metadata(void *addr_block, int size);
 static t_area	*ft_find_next_suitable_area(t_area *area, size_t size);
 static t_block	*ft_find_next_suitable_block(t_area *area, size_t size);
 static t_area	*ft_map_new_area(t_area *area,size_t size);
+static t_area	*ft_mapping(void *ptr, size_t size);
 
 
 

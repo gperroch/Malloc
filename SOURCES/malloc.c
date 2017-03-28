@@ -6,9 +6,11 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/03/20 10:16:57 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/03/22 13:32:02 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "malloc.h"
 
 void            *malloc(size_t size)
 {
@@ -32,7 +34,7 @@ void            *malloc(size_t size)
 		else
 		{
 			ptr_block = NULL;
-            ptr_area = ptr_area->next ? ptr_area->next : ft_map_new_area(ptr_area, size);
+            ptr_area = ptr_area->next ? ptr_area->next : ft_mapping(ptr_area, size);
 		}
 	}
 	return ((char *)ptr_block + sizeof(t_block));
@@ -62,7 +64,7 @@ static t_block	*ft_find_next_suitable_block(t_area *area, size_t size)
 		ptr_block = ptr_block->next;
 
     // ATTENTION : verifier que le nouveau bloc de data ne depasse pas de la zone
-    if ((ptr_block->size < size || !ptr_block->free) && !ptr_block->next && ptr_area->size_area + (long)ptr_area - ((long)ptr_block + sizeof(t_block)) >= size && ptr_area->size_area + (long)ptr_area - ((long)ptr_block + sizeof(t_block)) < ptr_area->size_area)
+    if ((ptr_block->size < size || !ptr_block->free) && !ptr_block->next && area->size_area + (long)area - ((long)ptr_block + sizeof(t_block)) >= size && area->size_area + (long)area - ((long)ptr_block + sizeof(t_block)) < area->size_area)
 	{
 		ptr_block->next = (t_block *)((char *)ptr_block + ptr_block->size + sizeof(t_block));
 		ptr_block = ptr_block->next;
