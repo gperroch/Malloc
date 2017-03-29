@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/03/22 13:30:11 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/03/29 15:17:12 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define AREA_SMALL (((SMALL + sizeof(t_block)) * 100) + sizeof(t_area))
 # define align4(x) ((((x - 1) >> 2) << 2) + 4)
 
-typedef struct		s_block
+typedef struct		s_block  // Verifier la taille maximum de la structure en assignant la valeur maximum aux variables numériques
 {
 	size_t			size;
 	struct s_block	*next;
@@ -44,7 +44,7 @@ typedef struct		s_area
 
 void				*malloc(size_t size);
 void				*realloc(void *ptr, size_t size);
-void				dump_mem(void *ptr, int len);
+void				dump_mem(void *ptr, int len, int col);
 void				show_alloc_mem(void);
 void				free(void *ptr);
 int					ft_new_metadata(void *addr_block, int size);

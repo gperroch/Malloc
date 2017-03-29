@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/03/28 11:01:32 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/03/29 16:02:43 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,11 @@ void            *malloc(size_t size)
 	t_area		*ptr_area = NULL;
 	t_block		*ptr_block = NULL;
 
+	if (size <= 0)
+		return (NULL);
 	if (!start)
 		start = ft_mapping(start, size);
-	if (size == 0)
-		return (start); // !! A ENLEVER
 	ptr_area = start;
-
-	printf("MAPPING DE START\n");
-	dump_mem(start, 256);
 
 	while (!ptr_block)
 	{
@@ -51,10 +48,6 @@ static t_area	*ft_find_next_suitable_area(t_area *area, size_t size)
     if ((area->size_data < size || !area->free) && !area->next)
     {
         area->next = ft_mapping(area->next, size);
-	
-		printf("NOUVELLE AREA\n");
-		dump_mem(area, 256);
-    
 		area = area->next;
     }
 
@@ -76,9 +69,6 @@ static t_block	*ft_find_next_suitable_block(t_area *area, size_t size)
 		ptr_block->next = (t_block *)((char *)ptr_block + ptr_block->size + sizeof(t_block));
 		ptr_block = ptr_block->next;
 		ft_new_metadata(ptr_block, size);
-
-		printf("NOUVELLES METADATA\n");
-		dump_mem(area, 256);
 	}
 
 	return (ptr_block);
@@ -88,6 +78,7 @@ int		ft_new_metadata(void *addr_block, int size)
 {
 	t_block		metadata;
 
+	ft_memset(&metadata, 0, sizeof(t_block));
 	metadata.size = size;
 	metadata.free = 1;
 	metadata.next = NULL;
@@ -130,7 +121,7 @@ static t_area	*ft_mapping(void *ptr, size_t size)
 	size_area = (size <= TINY) ? AREA_TINY : AREA_SMALL;
 	size_area = (size > TINY && size <= SMALL) ? AREA_SMALL : size_area;
 	size_area = (size > SMALL) ? (size + sizeof(t_area) + sizeof(t_block)) : size_area;
-	start = mmap(ptr, size_area, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANON | MAP_SHARED, -1, 0);
+	start = mmap(ptr, size_area, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANON | MAP_PRIVATE, -1, 0);
 	ptr = start;
 	ft_bzero(&first_area.size_area, 32);
 	first_area.size_area = size_area;

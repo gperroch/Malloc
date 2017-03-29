@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gperroch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/05/16 16:30:24 by gperroch          #+#    #+#             */
-/*   Updated: 2017/03/29 11:26:58 by gperroch         ###   ########.fr       */
+/*   Created: 2017/03/29 11:28:50 by gperroch          #+#    #+#             */
+/*   Updated: 2017/03/29 11:39:55 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-void			free(void *ptr)
+int			main(int argc, char **argv)
 {
-	t_area		*start;
-	t_block		*block;
+	char	*ptr1;
 
-	if (!ptr)
-		return ;
-
-	block = ptr - sizeof(t_block);
-	block->free = 1;		
+	ptr1 = (char*)malloc(sizeof(char) * 10);
+	ptr1[9] = 0;
+	ft_memset(ptr1, 65, 9);
+	write(1, ptr1, 9);
+	write(1, "\n", 1);
+	free(ptr1 + 3);
+	ft_memset(ptr1, 66, 3);
+	write(1, ptr1, 9);
+	write(1, "\n", 1);
+	return 0;
 }
