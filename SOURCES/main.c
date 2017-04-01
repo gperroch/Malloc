@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 16:07:49 by gperroch          #+#    #+#             */
-/*   Updated: 2017/03/29 16:37:39 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/04/01 14:06:12 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int			main(int argc, char **argv)
 	ft_memset(ptr, 252, atoi(argv[1]));
 	ptr = malloc(atoi(argv[1]));
 	ft_memset(ptr, 251, atoi(argv[1]));
-	dump_mem(start - 64, 64 * 40, 32);
+	dump_mem(start - 64, 64 * 60, 32);
 /*
 	while (i < max)
 	{
