@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/03/29 15:17:12 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/05/30 10:41:52 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct		s_block  // Verifier la taille maximum de la structure en assign
 	char			data[8];
 }					t_block;
 
-typedef struct		s_area
+typedef struct		s_area // N'AVOIR PLUS QU'UNE SEULE STRUCTURE POUR AREA ET BLOCK
 {
 	//Taille de la zone complete
 	size_t			size_area;
@@ -47,7 +47,7 @@ void				*realloc(void *ptr, size_t size);
 void				dump_mem(void *ptr, int len, int col);
 void				show_alloc_mem(void);
 void				free(void *ptr);
-int					ft_new_metadata(void *addr_block, int size);
+int					ft_new_metadata(void *addr_block, int size, t_area *t_area);
 static t_area	*ft_find_next_suitable_area(t_area *area, size_t size);
 static t_block	*ft_find_next_suitable_block(t_area *area, size_t size);
 static t_area	*ft_map_new_area(t_area *area,size_t size);
