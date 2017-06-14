@@ -27,9 +27,9 @@ void            *malloc(size_t size)
         ft_new_area(&area); // Création de la nouvelle zone, ajout du premier bloc vierge.
     }
 
-    ft_find_bloc(area, &bloc, size); // Le bloc est necessairement trouvé.
-    ft_update_metadata(bloc, size);
-    ft_add_next_metadata(bloc, area); // Ajout des metadata vierges qui font que le bloc est nécessairement trouvé si la zone et validée.Si la zone n'a plus de place, aucune metadata n'est ajoutée et une nouvelle zone sera crée.
+    ft_find_bloc(area, &bloc, size); // Le bloc est necessairement trouvé. Ajout des cas d'erreur à faire.
+    ft_update_metadata(bloc, size); // Cas d'erreurs à faire.
+    ft_add_next_metadata(bloc, area); // Ajout des metadata vierges qui font que le bloc est nécessairement trouvé si la zone et validée.Si la zone n'a plus de place, aucune metadata n'est ajoutée et une nouvelle zone sera créée.
 
     return (bloc);
 }
@@ -101,4 +101,9 @@ int         ft_new_area(t_area **area, size_t size) // Ajout d'une nouvelle zone
     cursor = new_area + sizeof(t_area);
     *cursor = first_bloc;
     return (1);
+}
+
+int			ft_add_next_metadata()
+{
+	
 }
