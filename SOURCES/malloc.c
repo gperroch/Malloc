@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/05/30 10:31:58 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/08/29 14:41:43 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static t_block	*ft_find_next_suitable_block(t_area *area, size_t size)
 	return (ptr_block);
 }
 
-int		ft_new_metadata(void *addr_block, int size, t_area *area)
+int		ft_new_metadata(void *addr_block, int size, t_area *area) // Virer le *area si il n'est pas utilisé
 {
 	t_block		metadata;
 

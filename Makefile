@@ -3,41 +3,61 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+         #
+#    By: tpaulmye <tpaulmye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2017/03/20 10:33:01 by gperroch          #+#    #+#              #
-#    Updated: 2017/03/28 10:25:47 by gperroch         ###   ########.fr        #
+#    Created: 2015/08/14 09:17:27 by tpaulmye          #+#    #+#              #
+#    Updated: 2017/08/29 15:52:55 by gperroch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME=				malloc.out
+NAME_COREWAR = malloc.out
 
-SOURCES_FILES=		malloc.c 	\
-					free.c		\
-					realloc.c
+SRC_COREWAR_PATH = ./SOURCES/
+SRC_COREWAR_NAME =	main.c \
+					../TESTS/malloc_algo_2.c \
+					realloc.c \
+					free.c \
+					dump_mem.c
+					#malloc.c
 
-OBJECTS_FILES=		$(SOURCES_FILES:.c=.o)
+OBJ_COREWAR_PATH = ./OBJECTS/
+INC_PATH = ./INCLUDES/
+LIBFT = LIBFTPRINTF/LIBFTPRINTF.a
+LIB_PATH = ./LIBFTPRINTF/
+#LIB_NAMES = -lft
+CC = gcc
+#CFLAGS = -Wall -Wextra -Werror
 
-SOURCES_FOLDER=		./SOURCES/
+OBJ_COREWAR_NAME = $(SRC_COREWAR_NAME:.c=.o)
+OBJ_COREWAR = $(addprefix $(OBJ_COREWAR_PATH),$(OBJ_COREWAR_NAME))
 
-OBJECTS_FOLDER=		./OBJECTS/
+LIB = $(addprefix -L,$(LIB_PATH))
+INC = $(addprefix -I,$(INC_PATH))
+LDFLAGS = $(LIB) #$(LIB_NAMES)
 
-SOURCES=$(addprefix $(SOURCES_FOLDER),$(SOURCES_FILES))
-OBJECTS=$(addprefix $(OBJECTS_FOLDER),$(OBJECTS_FILES))
+.PHONY: all clean fclean re libft
 
-COMPILATOR_FLAGS = -Wall -Wextra -Werror
+all: $(LIBFT) $(NAME_COREWAR)
 
-all: $(NAME)
+$(NAME_COREWAR): $(LIBFT) $(OBJ_COREWAR)
+	@$(CC) $^ -o $@ $(LDFLAGS)
+	@echo "$(NAME_COREWAR) complete ! 🍻 "
 
-$(NAME): $(OBJECTS)
-	gcc $^ -o $@ -L LIBFTPRINTF
-
-$(OBJECTS_FOLDER)%.o: $(SOURCES_FOLDER)%.c
-	mkdir $(OBJECTS_FOLDER) 2> /dev/null || echo > /dev/null
-	gcc -c $< -o $@ -I INCLUDES
+$(OBJ_COREWAR_PATH)%.o: $(SRC_COREWAR_PATH)%.c
+	@mkdir $(OBJ_COREWAR_PATH) 2> /dev/null || echo  > /dev/null
+	$(CC) $(CFLAGS) $(INC) -o $@ -c $<
 
 clean:
-	rm $(OBJECTS)
+	@rm -rf $(OBJ_COREWAR)
+	@rmdir $(OBJ_COREWAR_PATH) obj 2> /dev/null || echo  > /dev/null
+	@make clean -C LIBFTPRINTF
 
 fclean: clean
-	rm $(NAME)
+	@rm -rf $(NAME_COREWAR)
+	@make fclean -C LIBFTPRINTF
+	@echo "Everything's clean, master !"
+
+re: fclean all
+
+$(LIBFT):
+	make -j4 -C LIBFTPRINTF

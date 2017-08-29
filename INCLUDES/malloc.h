@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/05/30 10:41:52 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/08/29 16:00:52 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,14 @@ typedef struct		s_area // N'AVOIR PLUS QU'UNE SEULE STRUCTURE POUR AREA ET BLOCK
 	//Taille des donnees (zone - structure d'entete)
 	size_t			size_data;
 }					t_area;
+
+typedef struct			s_metadata
+{
+	size_t				size;
+	struct s_metadata	*next;
+	int					free;
+	size_t				size_data;
+}						t_metadata;
 
 void				*malloc(size_t size);
 void				*realloc(void *ptr, size_t size);

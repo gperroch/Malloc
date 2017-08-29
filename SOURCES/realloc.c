@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/17 15:57:43 by gperroch          #+#    #+#             */
-/*   Updated: 2017/03/29 15:48:07 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/08/29 14:41:57 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void			*realloc(void *ptr, size_t size)
 		if (size_total - size >= sizeof(t_block) + 4) // +4 ? pourquoi pas + TINY ou SMALL ? Vérifier qu'on a la place pour un nouveau block (header + data) ?
 		{
 			tmp = ptr + size;
-			ft_new_metadata(tmp, size_total - size - sizeof(t_block));
+			ft_new_metadata(tmp, size_total - size - sizeof(t_block), NULL);
 			//printf("new block at %p, size %lu\n", (ptr + size), size_total - size - sizeof(t_block));
 			tmp->free = 1;
 			tmp->next = next_block;

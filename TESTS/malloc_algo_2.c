@@ -6,12 +6,18 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/05/30 10:41:15 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/08/29 15:57:57 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 #define DEBUG(x) write(1, x, ft_strlen(x));
+
+int         ft_find_area(void *start, t_area **area, size_t size);
+int         ft_find_bloc(t_area *area, t_block **bloc, size_t size);
+int         ft_update_metadata(t_block *bloc, size_t size);
+int         ft_size_available(t_area *area, t_block *bloc, size_t size);
+int         ft_new_area(t_area **area, size_t size);
 
 void            *malloc(size_t size)
 {
@@ -24,12 +30,12 @@ void            *malloc(size_t size)
     bloc = NULL;
     if (!ft_find_area(start, &area, size)) // Pas de zone disponibles trouvée.
     {
-        ft_new_area(&area); // Création de la nouvelle zone, ajout du premier bloc vierge.
+        ft_new_area(&area, size); // Création de la nouvelle zone, ajout du premier bloc vierge.
     }
 
     ft_find_bloc(area, &bloc, size); // Le bloc est necessairement trouvé.
     ft_update_metadata(bloc, size);
-    ft_add_next_metadata(bloc, area); // Ajout des metadata vierges qui font que le bloc est nécessairement trouvé si la zone et validée.Si la zone n'a plus de place, aucune metadata n'est ajoutée et une nouvelle zone sera crée.
+//    ft_add_next_metadata(bloc, area); // Ajout des metadata vierges qui font que le bloc est nécessairement trouvé si la zone et validée.Si la zone n'a plus de place, aucune metadata n'est ajoutée et une nouvelle zone sera crée.
 
     return (bloc);
 }
