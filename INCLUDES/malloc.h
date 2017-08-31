@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/08/29 16:00:52 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/08/29 16:09:28 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct		s_area // N'AVOIR PLUS QU'UNE SEULE STRUCTURE POUR AREA ET BLOCK
 
 typedef struct			s_metadata
 {
-	size_t				size;
+	size_t				size_total;
 	struct s_metadata	*next;
 	int					free;
 	size_t				size_data;
