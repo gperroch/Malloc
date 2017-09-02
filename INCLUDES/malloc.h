@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/02 15:09:35 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/02 18:11:41 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
 # include <unistd.h>
 # include <sys/mman.h>
 # include "libftprintf.h"
-# define TINY 128
-# define SMALL 2048
-# define AREA_TINY (((TINY + sizeof(t_block)) * 100) + sizeof(t_area))
-# define AREA_SMALL (((SMALL + sizeof(t_block)) * 100) + sizeof(t_area))
+# define TINY 128 //64
+# define SMALL 1024
+# define AREA_TINY (((TINY + sizeof(t_block)) * 128) - 32)
+# define AREA_SMALL (((SMALL + sizeof(t_block)) * 128) - 32)// + sizeof(t_area))
 # define align4(x) ((((x - 1) >> 2) << 2) + 4)
 
 typedef struct		s_block  // Verifier la taille maximum de la structure en assignant la valeur maximum aux variables numériques
@@ -42,12 +42,12 @@ typedef struct		s_area // N'AVOIR PLUS QU'UNE SEULE STRUCTURE POUR AREA ET BLOCK
 	size_t			size_data;
 }					t_area;
 
-typedef struct			s_metadata
+typedef struct			s_metadata // size_?? a remanier.
 {
-	size_t				size_total; // Visiblement, dans le cas d'un bloc, cela correspond a la taille du bloc.
+	size_t				size_total; // BLOC : correspond a la taille effective du bloc. // AREA : correspond a la taille totale de la zone.
 	struct s_metadata	*next;
 	int					free;
-	size_t				size_data;
+	size_t				size_data; // BLOC : correspond a la taille maximum du bloc. // AREA : comme pour les BLOC.
 }						t_metadata;
 
 void				*malloc(size_t size);
