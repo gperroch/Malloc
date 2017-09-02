@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/02 14:54:41 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/02 15:23:23 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,17 @@ void            *malloc(size_t size)
     i = ft_find_bloc(area, &bloc, size); // Le bloc est necessairement trouvé. Ajout des cas d'erreur à faire.
     printf("i = %d\n", i);
     ft_update_metadata(bloc, size); // Cas d'erreurs à faire.
-//    ft_add_next_metadata(bloc, area); // Ajout des metadata vierges qui font que le bloc est nécessairement trouvé si la zone et validée.Si la zone n'a plus de place, aucune metadata n'est ajoutée et une nouvelle zone sera créée.
+    ft_add_next_metadata(bloc, area); // Ajout des metadata qui font que le bloc est nécessairement trouvé si la zone et validée.Si la zone n'a plus de place, aucune metadata n'est ajoutée et une nouvelle zone sera créée.
 
     dump_mem(start, 64 * 30, 32);
-    return (bloc);
+    return ((void*)bloc + sizeof(t_metadata));
 }
 
 int         ft_find_area(void *start, t_metadata **area, size_t size)
 {
     t_metadata  *cursor;
 
-    cursor = start;
+    cursor = (void*)start;
     if (!start)
         return (0);
     while ((cursor->size_total < size || !cursor->free) && cursor->next)
@@ -122,5 +122,11 @@ int         ft_new_area(t_metadata **area, size_t size) // Ajout d'une nouvelle 
 
 int			ft_add_next_metadata(t_metadata *bloc, t_metadata *area)
 {
+    t_metadata  *new_bloc;
+
+    // Le nouveau bloc est a l'address du bloc cense suivre celui en parametre. Prendre en compte la limite de la zone.
+    new_bloc = (void*)bloc + sizeof(t_metadata) + bloc->size_total;
+    new_bloc->free = 1;
+    bloc->next = new_bloc;
     return (1);
 }
