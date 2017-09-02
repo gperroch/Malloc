@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/08/31 17:59:27 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/02 14:54:41 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void            *malloc(size_t size)
     static void *start = NULL;
     t_metadata  *area;
     t_metadata  *bloc;
+    int         i = 3;
 
     area = NULL;
     bloc = NULL;
@@ -34,7 +35,8 @@ void            *malloc(size_t size)
         if (!start) // Premiere allocation, start est NULL, start devient le debut de la premiere zone.
             start = area;
     }
-    ft_find_bloc(area, &bloc, size); // Le bloc est necessairement trouvé. Ajout des cas d'erreur à faire.
+    i = ft_find_bloc(area, &bloc, size); // Le bloc est necessairement trouvé. Ajout des cas d'erreur à faire.
+    printf("i = %d\n", i);
     ft_update_metadata(bloc, size); // Cas d'erreurs à faire.
 //    ft_add_next_metadata(bloc, area); // Ajout des metadata vierges qui font que le bloc est nécessairement trouvé si la zone et validée.Si la zone n'a plus de place, aucune metadata n'est ajoutée et une nouvelle zone sera créée.
 
@@ -62,7 +64,7 @@ int         ft_find_bloc(t_metadata *area, t_metadata **bloc, size_t size) // Mu
 {
     t_metadata *cursor;
 
-    cursor = area + sizeof(t_metadata);
+    cursor = (void*)area + sizeof(t_metadata);
     while ((cursor->size_total < size || !cursor->free) && cursor->next)
         cursor = cursor->next;
 
@@ -89,7 +91,7 @@ int         ft_size_available(t_metadata *area, t_metadata *bloc, size_t size)
 
 int         ft_new_area(t_metadata **area, size_t size) // Ajout d'une nouvelle zone, soit en première position, soit après la dernière zone trouvée.
 {
-    void        *cursor;
+    char        *cursor;
     t_metadata  *new_area;
     int         size_total;
     t_metadata  first_bloc;
@@ -111,11 +113,10 @@ int         ft_new_area(t_metadata **area, size_t size) // Ajout d'une nouvelle 
     new_area->free = 1;
 
     // Puis ajout du premier bloc vierge.
-    /*first_bloc = */ft_memset(&first_bloc, 0, sizeof(t_metadata));
-    printf("sizeof(t_metadata) = %d\n", sizeof(t_metadata));
-    cursor = (void*)((void*)new_area + sizeof(t_metadata)); // Probleme a l'addition
+    ft_memset(&first_bloc, 1, sizeof(t_metadata)); // Repasser le 1 a 0.
+
+    cursor = (char*)((char*)new_area + sizeof(t_metadata)); // Probleme a l'addition
     *((t_metadata*)cursor) = first_bloc;
-    printf("new_area = %p, cursor = %p, new_area + sizeof(t_metadata) = %p\n", new_area, cursor, new_area + sizeof(t_metadata));
     return (1);
 }
 
