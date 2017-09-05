@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/17 15:57:43 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/05 16:03:34 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/05 18:04:34 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,22 @@ void 			*realloc(void *ptr, size_t size)
 	t_metadata	*next_bloc;
 	t_metadata  last_bloc;
 	t_metadata	*last_bloc_addr;
+	void 		*new_bloc;
 	int			size_total;
+
+	if (!ptr)
+		printf("ptr null\n"); // If ptr is NULL, realloc() is identical to a call to malloc() for size bytes
+
+	if (!size && !ptr)
+		return (NULL); // If size is zero and ptr is not NULL, a new, minimum sized object is allocated and the original object is freed
 
 	bloc = ptr - sizeof(t_metadata);
 	if (bloc->magic_number != MAGIC_NUMBER_BLOC)
+	{
+		printf("PTR N'EST PAS LE DEBUT D'UN BLOC.\n");
+		// Comment gerer cela ? Renvoyer NULL ou reculer jusqu'au premier amgic_number ? // A voir comment le vrai realloc fonctionne.
 		return (NULL);
+	}
 	if (bloc->size_total >= size)
 		return (ptr);
 
@@ -40,6 +51,14 @@ void 			*realloc(void *ptr, size_t size)
 		size_total += next_bloc->size_total + sizeof(t_metadata);
 		next_bloc = next_bloc->next;
 	}
+
+	if (size_total < size || !ptr)
+	{
+		new_bloc = malloc(size);
+		ft_memcpy(new_bloc, ptr, bloc->size_total);
+		return (new_bloc);
+	}
+
 	if (size_total >= size)
 	{
 		bloc->size_total = size_total;
