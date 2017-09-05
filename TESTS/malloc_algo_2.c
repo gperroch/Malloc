@@ -6,12 +6,14 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/02 18:33:56 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/05 15:30:37 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 #define DEBUG(x) write(1, x, ft_strlen(x));
+
+// Ajouter une verification des magic_number ici ?
 
 int         ft_find_area(void *start, t_metadata **area, size_t size);
 int         ft_find_bloc(t_metadata *area, t_metadata **bloc, size_t size);
@@ -27,6 +29,7 @@ void            *malloc(size_t size)
     t_metadata  *bloc;
     int         i = 3;
 
+    printf("sizeof(t_metadata) = %d\n", sizeof(t_metadata));
     area = NULL;
     bloc = NULL;
     if (!ft_find_area(start, &area, size)) // Pas de zone disponibles trouvée.
@@ -122,10 +125,13 @@ int         ft_new_area(t_metadata **area, size_t size) // Ajout d'une nouvelle 
     new_area->size_data = (size <= TINY) ? TINY : SMALL;
     new_area->size_data = (size > SMALL) ? size : new_area->size_data;
     new_area->free = 1;
+    new_area->magic_number = MAGIC_NUMBER_AREA;
 
     // Puis ajout du premier bloc vierge.
     ft_memset(&first_bloc, 0, sizeof(t_metadata));
     cursor = (char*)((char*)new_area + sizeof(t_metadata));
+    first_bloc.magic_number = MAGIC_NUMBER_BLOC;
+    first_bloc.prev_area = new_area;
     *((t_metadata*)cursor) = first_bloc;
 
     printf("NOUVELLE ZONE : %10p %5d %5d\n", new_area, new_area->size_total, new_area->size_data);
@@ -149,6 +155,8 @@ int			ft_add_next_metadata(t_metadata *bloc, t_metadata *area)
 
     new_bloc->free = 1;
     new_bloc->size_data = area->size_data;
+    new_bloc->magic_number = MAGIC_NUMBER_BLOC;
     bloc->next = new_bloc;
+    new_bloc->prev_area = area;
     return (1);
 }

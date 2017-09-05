@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/02 18:11:41 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/05 14:47:04 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # define AREA_TINY (((TINY + sizeof(t_block)) * 128) - 32)
 # define AREA_SMALL (((SMALL + sizeof(t_block)) * 128) - 32)// + sizeof(t_area))
 # define align4(x) ((((x - 1) >> 2) << 2) + 4)
+# define MAGIC_NUMBER_BLOC 0x810C
+# define MAGIC_NUMBER_AREA 0x811C
 
 typedef struct		s_block  // Verifier la taille maximum de la structure en assignant la valeur maximum aux variables numériques
 {
@@ -46,8 +48,11 @@ typedef struct			s_metadata // size_?? a remanier.
 {
 	size_t				size_total; // BLOC : correspond a la taille effective du bloc. // AREA : correspond a la taille totale de la zone.
 	struct s_metadata	*next;
+	struct s_metadata	*prev_area; // BLOC : adresse de la zone correspondante. // AREA : adresse de la zone precedente.
+	size_t				magic_number;
 	int					free;
 	size_t				size_data; // BLOC : correspond a la taille maximum du bloc. // AREA : comme pour les BLOC.
+	char				padding[16];
 }						t_metadata;
 
 void				*malloc(size_t size);

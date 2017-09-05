@@ -6,7 +6,7 @@
 #    By: tpaulmye <tpaulmye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/08/14 09:17:27 by tpaulmye          #+#    #+#              #
-#    Updated: 2017/08/31 15:13:18 by gperroch         ###   ########.fr        #
+#    Updated: 2017/09/05 15:23:56 by gperroch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,8 @@ SRC_COREWAR_PATH = ./SOURCES/
 SRC_COREWAR_NAME =	main.c \
 					../TESTS/malloc_algo_2.c \
 					free.c \
-					dump_mem.c
-					#realloc.c \
+					dump_mem.c \
+					realloc.c 
 					#malloc.c
 
 OBJ_COREWAR_PATH = ./OBJECTS/

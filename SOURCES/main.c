@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 16:07:49 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/02 18:21:26 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/05 16:04:37 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,35 @@ int			main(int argc, char **argv)
 {
 	void	*start;
 	void	*tmp;
+	t_metadata 	*cursor;
 	int		i;
 
 	i = 0;
 	start = malloc(atoi(argv[1]));
-	while (++i < 150)
+	while (i++ < 10)
 	{
-		tmp = malloc(atoi(argv[1]));
-		printf("Allocation %3d : %p\n", i + 1, tmp);
+		if(i == 3)
+			tmp = malloc(atoi(argv[1]));
+		else
+			malloc(atoi(argv[1]));
 	}
-	i = 0;
-	while (++i < 150)
+	dump_mem(start - 128, 64 * 20, 32);
+
+	cursor = start - sizeof(t_metadata);
+	while (cursor)
 	{
-		tmp = malloc(atoi(argv[1]) * 10);
-		printf("Allocation x10 %3d : %p\n", i + 1, tmp);
+		if (cursor->magic_number != MAGIC_NUMBER_BLOC)
+			printf("CURSOR N'EST PAS SUR UN BLOC\n");
+		if ((char*)cursor + sizeof(t_metadata) != tmp)
+		{
+			printf("FREE UN BLOC\n");
+			cursor->free = 1;
+		}
+		cursor = cursor->next;
 	}
 
-	dump_mem(start - 64, 64 * 300, 32);
+
+	realloc(tmp, atoi(argv[1]) + 2);
+	dump_mem(start - 128, 64 * 20, 32);
 	return 0;
 }
