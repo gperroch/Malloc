@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/17 15:57:43 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/05 18:04:34 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/11 12:34:02 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,55 +28,60 @@ void 			*realloc(void *ptr, size_t size)
 	int			size_total;
 
 	if (!ptr)
-		printf("ptr null\n"); // If ptr is NULL, realloc() is identical to a call to malloc() for size bytes
+		return (malloc(size));
+	if (ptr && !size)
+	{
+		free(ptr);
+		return (malloc(size));
+	}
 
-	if (!size && !ptr)
-		return (NULL); // If size is zero and ptr is not NULL, a new, minimum sized object is allocated and the original object is freed
+	// !ptr && size : call malloc(size)
+	// !ptr && !size : call malloc(0) aka malloc(size)
+	// ptr && size : reallocation normale
+	// ptr && !size : call malloc(0) et free(ptr)
+
+	// PROCESSUS DE REALLOCATION : ptr && size
 
 	bloc = ptr - sizeof(t_metadata);
-	if (bloc->magic_number != MAGIC_NUMBER_BLOC)
+	if (bloc->magic_number != MAGIC_NUMBER_BLOC) // Le pointeur ne correspond pas au debut d'une zone allouee.
 	{
-		printf("PTR N'EST PAS LE DEBUT D'UN BLOC.\n");
-		// Comment gerer cela ? Renvoyer NULL ou reculer jusqu'au premier amgic_number ? // A voir comment le vrai realloc fonctionne.
-		return (NULL);
+		printf("error for object %p: pointer being realloc'd was not allocated\n", ptr);
+		return (ptr);
 	}
-	if (bloc->size_total >= size)
+	if (bloc->size_total >= size)  // La taille demandee est inferieure a la taille disponible.
 		return (ptr);
 
 	size_total = bloc->size_total;
 	next_bloc = bloc->next;
 	while (next_bloc && next_bloc->magic_number == MAGIC_NUMBER_BLOC
-		&& next_bloc->free && size_total < size)
+		&& next_bloc->free && size_total < size) // Cumule du nombre de blocs disponibles a la suite du premier.
 	{
 		size_total += next_bloc->size_total + sizeof(t_metadata);
 		next_bloc = next_bloc->next;
 	}
 
-	if (size_total < size || !ptr)
+	if (size_total < size) // Il n'y a pas suffisament de bloc disponibles. Malloc d'un nouveau bloc, copie des donnees.
 	{
 		new_bloc = malloc(size);
 		ft_memcpy(new_bloc, ptr, bloc->size_total);
+		bloc->free = 1;
 		return (new_bloc);
 	}
-
-	if (size_total >= size)
-	{
+	else if (size_total >= size) // Suffisament de blocs libres sont consecutifs.
 		bloc->size_total = size_total;
-		printf("TAILLE SUFFISANTE\n");
-	}
-	else
-	{
-		printf("TAILLE INSUFFISANTE\n");
-		// Malloc puis return.
-	}
 
-	printf("size_total:%d >= (size + sizeof(t_metadata) + 1):%d\n", size_total, size + sizeof(t_metadata) + 1);
 	if (size_total >= size + sizeof(t_metadata) + 1) // Il reste la place pour un bloc free de 1 octet. // On insere de nouvelles metadata pour rendre ce bloc disponible et ne pas prendre trop de place avec notre reallocation.
 	{
+		last_bloc.size_total = size_total - (size + sizeof(t_metadata));
+		last_bloc.next = 0; // A verifier
+		last_bloc.prev_area = bloc->prev_area;
+		last_bloc.magic_number = MAGIC_NUMBER_BLOC;
+		last_bloc.free = 1;
+		last_bloc.size_data = last_bloc.size_total; // Ou rediviser ce nouveau bloc en blocs de tailles max correspond a la size_data de la zone ?
 		// Initialisation du last_bloc a faire ici.
 		printf("CREATION DU LAST_BLOC\n");
-		ft_memset(&last_bloc, 255, sizeof(t_metadata));
-		last_bloc_addr = ptr + size;
+		//ft_memset(&last_bloc, 255, sizeof(t_metadata));
+		last_bloc_addr = (char*)ptr + size;
 		*last_bloc_addr = last_bloc;
 		bloc->size_total = size; // La place excedante a ete remplacee par un bloc vierge, la taille total du bloc realloue correspond parfaitement a la taille demandee.
 	}
