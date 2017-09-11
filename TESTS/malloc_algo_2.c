@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/05 15:30:37 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/11 18:05:14 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,29 @@ void            *malloc(size_t size)
     static void *start = NULL;
     t_metadata  *area;
     t_metadata  *bloc;
-    int         i = 3;
 
-    printf("sizeof(t_metadata) = %d\n", sizeof(t_metadata));
     area = NULL;
     bloc = NULL;
+    if ((int)size < 0) // ATTENTION: sans le cast en int, le test malloc(-1) est passant alors qu'il ne devrait pas l'etre. Probleme de type en size_t et int a regler. Necessaire pour le malloc(2147483648) aussi.
+        return (NULL);
+
     if (!ft_find_area(start, &area, size)) // Pas de zone disponibles trouvée.
     {
         ft_new_area(&area, size); // Création de la nouvelle zone, ajout du premier bloc vierge.
         if (!start) // Premiere allocation, start est NULL, start devient le debut de la premiere zone.
             start = area;
     }
-    i = ft_find_bloc(area, &bloc, size); // Le bloc est necessairement trouvé. Ajout des cas d'erreur à faire.
+    ft_find_bloc(area, &bloc, size); // Le bloc est necessairement trouvé. Ajout des cas d'erreur à faire.
     //printf("i = %d\n", i);
+//    printf("+++++++++++++++++[MALLOC 1]\n");
+//    dump_mem(bloc, 32, 1);
     ft_update_metadata(bloc, size); // Cas d'erreurs à faire.
     ft_add_next_metadata(bloc, area); // Ajout des metadata qui font que le bloc est nécessairement trouvé si la zone et validée.Si la zone n'a plus de place, aucune metadata n'est ajoutée et une nouvelle zone sera créée.
                                         // ZONE PLEINE : passer le free de la zone a 1. Une nouvelle zone sera creee lors du prochain appel.
 
     //dump_mem(start, 64 * 30, 32);
+//    printf("+++++++++++++++++[MALLOC 2]\n");
+//    dump_mem(bloc, 4 * 32, 1);
     return ((void*)bloc + sizeof(t_metadata));
 }
 
@@ -73,7 +78,8 @@ int         ft_find_bloc(t_metadata *area, t_metadata **bloc, size_t size) // Mu
     cursor = (void*)area + sizeof(t_metadata);
     while ((cursor->size_total < size || !cursor->free) && cursor->next)
         cursor = cursor->next;
-
+//    printf("+++++++++++++++++[MALLOC 0.1]\n");
+//    dump_mem(cursor, 32, 1);
     *bloc = cursor;
     if (cursor->size_total >= size && cursor->free)
         return (1);
@@ -100,7 +106,7 @@ int         ft_new_area(t_metadata **area, size_t size) // Ajout d'une nouvelle 
     char        *cursor;
     t_metadata  *new_area;
     t_metadata  *tmp;
-    int         size_total;
+    size_t      size_total;
     t_metadata  first_bloc;
 
     size_total = (size <= TINY) ? AREA_TINY : AREA_SMALL;
@@ -132,9 +138,11 @@ int         ft_new_area(t_metadata **area, size_t size) // Ajout d'une nouvelle 
     cursor = (char*)((char*)new_area + sizeof(t_metadata));
     first_bloc.magic_number = MAGIC_NUMBER_BLOC;
     first_bloc.prev_area = new_area;
+//    printf("+++++++++++++++++[ft_new_area]\n");
+//    dump_mem(&first_bloc, 32, 1);
     *((t_metadata*)cursor) = first_bloc;
 
-    printf("NOUVELLE ZONE : %10p %5d %5d\n", new_area, new_area->size_total, new_area->size_data);
+//    printf("NOUVELLE ZONE : %10p %5zu %5zu\n", new_area, new_area->size_total, new_area->size_data);
     return (1);
 }
 
@@ -153,10 +161,15 @@ int			ft_add_next_metadata(t_metadata *bloc, t_metadata *area)
         return (0);
     }
 
+    // ATTENTION finir l'initialisation du bloc EN ENTIER. Certaines variables non initialisee peuvent etre consideree inexistante et donner une structure plus petite.
+    new_bloc->size_total = 0;
+    new_bloc->next = NULL;
+    new_bloc->prev_area = area;
+    new_bloc->magic_number = MAGIC_NUMBER_BLOC;
     new_bloc->free = 1;
     new_bloc->size_data = area->size_data;
-    new_bloc->magic_number = MAGIC_NUMBER_BLOC;
     bloc->next = new_bloc;
-    new_bloc->prev_area = area;
+//    printf("+++++++++++++++++[ft_add_next_metadata]\n");
+//    dump_mem(new_bloc, 32, 32);
     return (1);
 }

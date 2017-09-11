@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/05 14:47:04 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/11 15:32:20 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct			s_metadata // size_?? a remanier.
 	size_t				size_total; // BLOC : correspond a la taille effective du bloc. // AREA : correspond a la taille totale de la zone.
 	struct s_metadata	*next;
 	struct s_metadata	*prev_area; // BLOC : adresse de la zone correspondante. // AREA : adresse de la zone precedente.
-	size_t				magic_number;
+	int					magic_number;
 	int					free;
 	size_t				size_data; // BLOC : correspond a la taille maximum du bloc. // AREA : comme pour les BLOC.
 	char				padding[16];
