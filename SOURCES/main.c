@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 16:07:49 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/12 13:14:44 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/12 15:28:01 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int				test_malloc_free()
 }
 
 
-int			test_malloc_realloc()
+int			test_malloc_realloc() // Verifier que les donnees sont bien recopiees lors d'un realloc trop grand.
 {
 	void 		*ptr;
 	void 		*ptr2;

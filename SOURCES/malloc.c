@@ -6,151 +6,166 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/08/29 14:41:43 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/12 15:23:58 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 #define DEBUG(x) write(1, x, ft_strlen(x));
 
+// Ajouter une verification des magic_number ici ?
+// En cas d’erreur, les fonctions malloc() et realloc() retournent un pointeur NULL
+
+int         ft_find_area(void *start, t_metadata **area, size_t size);
+int         ft_find_bloc(t_metadata *area, t_metadata **bloc, size_t size);
+int         ft_update_metadata(t_metadata *bloc, size_t size);
+int         ft_size_available(t_metadata *area, t_metadata *bloc, size_t size);
+int         ft_new_area(t_metadata *start, t_metadata **area, size_t size);
+int			ft_add_next_metadata(t_metadata *bloc, t_metadata *area);
+
 void            *malloc(size_t size)
 {
-	static void	*start = NULL; // La passer en global pour le multi-thread ?
-	void        **tmp = NULL;
-	t_area		*ptr_area = NULL;
-	t_block		*ptr_block = NULL;
+    static void *start = NULL;
+    t_metadata  *area;
+    t_metadata  *bloc;
 
-	if (size <= 0)
-		return (NULL);
-	if (!start)
-		start = ft_mapping(start, size);
-	ptr_area = start;
+    area = NULL;
+    bloc = NULL;
+    if ((int)size < 0) // ATTENTION: sans le cast en int, le test malloc(-1) est passant alors qu'il ne devrait pas l'etre. Probleme de type en size_t et int a regler. Necessaire pour le malloc(2147483648) aussi.
+        return (NULL);
 
-	while (!ptr_block)
-	{
-		ptr_area = ft_find_next_suitable_area(ptr_area, size);
-		ptr_block = ft_find_next_suitable_block(ptr_area, size);
-		if (ptr_block->size >= size && ptr_block->free)
-			ptr_block->free = 0;
-		else
-		{
-			ptr_block = NULL;
-            ptr_area = ptr_area->next ? ptr_area->next : ft_mapping(ptr_area, size);
-		}
-	}
-	return ((char *)ptr_block + sizeof(t_block));
-}
-
-static t_area	*ft_find_next_suitable_area(t_area *area, size_t size)
-{
-	// Trouver la zone appropriee, sinon en cree une nouvelle
-	while ((area->size_data < size || !area->free) && area->next)
-		area = area->next;
-    if ((area->size_data < size || !area->free) && !area->next)
+    if (!ft_find_area(start, &area, size)) // Pas de zone disponibles trouvée.
     {
-        area->next = ft_mapping(area->next, size);
-		area = area->next;
+        ft_new_area(start, &area, size); // Création de la nouvelle zone, ajout du premier bloc vierge.
+        if (!start) // Premiere allocation, start est NULL, start devient le debut de la premiere zone.
+            start = area;
     }
+    ft_find_bloc(area, &bloc, size); // Le bloc est necessairement trouvé. Ajout des cas d'erreur à faire.
+    ft_update_metadata(bloc, size); // Cas d'erreurs à faire.
+    if (size <= SMALL)
+        ft_add_next_metadata(bloc, area); // Ajout des metadata qui font que le bloc est nécessairement trouvé si la zone et validée.Si la zone n'a plus de place, aucune metadata n'est ajoutée et une nouvelle zone sera créée.
+                                        // ZONE PLEINE : passer le free de la zone a 1. Une nouvelle zone sera creee lors du prochain appel.
 
-	return (area);
+    return ((void*)bloc + sizeof(t_metadata));
 }
 
-static t_block	*ft_find_next_suitable_block(t_area *area, size_t size)
+int         ft_find_area(void *start, t_metadata **area, size_t size)
 {
-	t_block		*ptr_block;
+    t_metadata  *cursor;
 
-	// Trouver un block libre
-	ptr_block = (t_block *)((char *)area + sizeof(t_area)); //sizeof(t_area) ?
-	while ((ptr_block->size < size || !ptr_block->free) && ptr_block->next)
-		ptr_block = ptr_block->next;
+    cursor = (void*)start;
+    if (!start)
+        return (0);
+    //while ((cursor->size_total < size || !cursor->free) && cursor->next)
+    while ((cursor->size_data < size || !cursor->free) && cursor->next)
+		cursor = cursor->next;
 
-    // ATTENTION : verifier que le nouveau bloc de data ne depasse pas de la zone. ... . Pourquoi depasser de la zone ? La creation de nouvelles metadata doit se faire apres insertion des donnees si il reste de la place dans le bloc.
-	// Les metadata sont crees au fur et a mesure des allocations. Chaque bloc fait la taille parfaite pour les data.D'ou la verification de la taille.
-	// Segfault lors de l'allocation de 10.000 small
-
-//	printf("area = %d, size_area = %d, end of area = %d, ptr_block = %d, size = %d, ptr_block + t_block + size = %d\n", area, area->size_area, area + area->size_area, ptr_block, size, ptr_block + sizeof(t_block) + size);
-
-    if ((ptr_block->size < size || !ptr_block->free)
-	&& !ptr_block->next
-	&& area->size_area + (long)area - ((long)ptr_block + sizeof(t_block)) >= size
-	&& area->size_area + (long)area - ((long)ptr_block + sizeof(t_block)) < area->size_area)
-/*	if ((ptr_block->size < size || !ptr_block->free)
-	&& !ptr_block->next
-	&& (ptr_block + sizeof(t_block) + size) <= area + area->size_area)*/
-	{
-//		DEBUG("IF USED\n");
-		ptr_block->next = (t_block *)((char *)ptr_block + ptr_block->size + sizeof(t_block));
-		ptr_block = ptr_block->next;
-		ft_new_metadata(ptr_block, size, area);
-	}
-
-	return (ptr_block);
-}
-
-int		ft_new_metadata(void *addr_block, int size, t_area *area) // Virer le *area si il n'est pas utilisé
-{
-	t_block		metadata;
-
-	ft_memset(&metadata, 0, sizeof(t_block));
-	metadata.size = size;
-	metadata.free = 1;
-	metadata.next = NULL;
-	// Segfault lors de l'allocation de 10.000 small
-	*(t_block *)addr_block = metadata;
+    *area = cursor;
+    //if (cursor->size_total >= size && cursor->free )
+    if (cursor->size_data >= size && cursor->free )
+        return (1);
 	return (0);
 }
 
-static int		ft_find_block(void **ptr, size_t size)
+int         ft_find_bloc(t_metadata *area, t_metadata **bloc, size_t size) // Mutualiser ft_find_bloc et ft_find_area quand bloc et area auront la meme structure
 {
-	t_block		*block;
+    t_metadata *cursor;
 
-	if (!*ptr)
-		return (-1);
-	block = *ptr + sizeof(t_area);
-	while ((block->size < size || !block->free) && block->next)
-		block = block->next;
-	if ((block->size < size || !block->free) && !block->next) // Aucun block libre
-	{
-		if ((void *)((block + sizeof(t_block)) - ((t_area *)ptr)->size_area) >= (void *)(size + sizeof(t_block)))
-		{
-			ft_new_metadata((block + sizeof(t_block) + block->size), size, NULL);
-			block->next = block + sizeof(t_block) + block->size;
-			block = block->next;
-		}
-		else
-		return (-1);
-	}
-	*ptr = (char *)block + sizeof(t_block);
-	block->free = 0;
-	return (1);
+    cursor = (void*)area + sizeof(t_metadata);
+    while ((cursor->size_total < size || !cursor->free) && cursor->next)
+        cursor = cursor->next;
+//    printf("+++++++++++++++++[MALLOC 0.1]\n");
+//    dump_mem(cursor, 32, 1);
+    *bloc = cursor;
+    if (cursor->size_total >= size && cursor->free)
+        return (1);
+    return (0);
 }
 
-static t_area	*ft_mapping(void *ptr, size_t size)
+int         ft_update_metadata(t_metadata *bloc, size_t size)
 {
-	void		*start;
-	t_area		first_area;
-	t_block		block;
-	int			size_area;
+    bloc->free = 0;
+    bloc->size_total = size;
+    if (size <= SMALL)
+        bloc->next = bloc + size;
+    return (0);
+}
 
-	size_area = (size <= TINY) ? AREA_TINY : AREA_SMALL;
-	size_area = (size > TINY && size <= SMALL) ? AREA_SMALL : size_area;
-	size_area = (size > SMALL) ? (size + sizeof(t_area) + sizeof(t_block)) : size_area;
-	start = mmap(ptr, size_area, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANON | MAP_PRIVATE, -1, 0);
-	if (ptr)
-		((t_area*)ptr)->next = start;
-	ptr = start;
-	ft_bzero(&first_area.size_area, 32);
-	first_area.size_area = size_area;
-	first_area.size_data = (size <= TINY) ? TINY : SMALL;
-	first_area.size_data = (size > SMALL) ? size : first_area.size_data;
-	first_area.next = NULL;
-	first_area.free = (size > SMALL) ? 0 : 1;
-	*(t_area *)start = first_area;
-	ft_bzero(&block.size, 32);
-	block.size = size;
-	block.next = NULL;
-	block.free = 1;
-	*((t_block *)(start + sizeof(t_area))) = block;
+int         ft_size_available(t_metadata *area, t_metadata *bloc, size_t size)
+{
+    if ((unsigned int)bloc + sizeof(t_metadata) + size <= (unsigned int)area + sizeof(t_metadata) + area->size_total)
+        return (1);
+    return (0);
+}
 
-	return (start);
+int         ft_new_area(t_metadata *start, t_metadata **area, size_t size) // Ajout d'une nouvelle zone, soit en première position, soit après la dernière zone trouvée.
+{
+    char        *cursor;
+    t_metadata  *new_area;
+    t_metadata  *tmp;
+    size_t      size_total;
+    t_metadata  first_bloc;
+
+    size_total = (size <= TINY) ? AREA_TINY : AREA_SMALL;
+    size_total = (size > TINY && size <= SMALL) ? AREA_SMALL : size_total;
+    size_total = (size > SMALL) ? (size + sizeof(t_metadata) + sizeof(t_metadata)) : size_total;
+
+    new_area = NULL;
+    //new_area = mmap(area, size_total, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANON | MAP_PRIVATE, -1, 0);
+    new_area = mmap(NULL, size_total, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANON | MAP_PRIVATE, -1, 0);
+    new_area->prev_area = NULL;
+    if (start) // Zone non NULL, pas la première utilisation.
+    {
+        tmp = start;
+        while (tmp->next)
+            tmp = tmp->next;
+        //(*area)->next = new_area;
+        tmp->next = new_area;
+        new_area->prev_area = tmp;
+        //*area = new_area;
+    }
+    *area = new_area;
+
+    new_area->size_total = size_total;
+    new_area->size_data = (size <= TINY) ? TINY : SMALL;
+    new_area->size_data = (size > SMALL) ? size : new_area->size_data;
+    new_area->free = (size > SMALL) ? 0 : 1;
+    new_area->magic_number = MAGIC_NUMBER_AREA;
+
+    // Puis ajout du premier bloc vierge.
+    ft_memset(&first_bloc, 0, sizeof(t_metadata));
+    cursor = (char*)((char*)new_area + sizeof(t_metadata));
+    first_bloc.magic_number = MAGIC_NUMBER_BLOC;
+    first_bloc.prev_area = new_area;
+    *((t_metadata*)cursor) = first_bloc;
+
+    return (1);
+}
+
+int			ft_add_next_metadata(t_metadata *bloc, t_metadata *area)
+{
+    t_metadata  *new_bloc;
+
+    // Le nouveau bloc est a l'address du bloc cense suivre celui en parametre. Prendre en compte la limite de la zone.
+    // Il contient free = 1 et la quantite max de donnees qu'il peut recevoir (en fonction de sa zone). La quantité max de donnees (size_data) restera fixe, la quantité effective de donnees sera egale a la max tant que
+    // le bloc est free, puis sera changee pour correspondre a la quantite de donnees requise lors de l'allocation. !! MODIFIER LES VARIABLES SIZE_TOTAL ET SIZE_DATA POUR LES RENDRE PLUS PARLANTES.
+    new_bloc = (void*)bloc + sizeof(t_metadata) + bloc->size_total;
+
+    if ((char*)new_bloc > (((char*)area + area->size_total) - (area->size_data +sizeof(t_metadata)))) // La zone n'a pas suffisament de place pour un nouveau bloc.
+    {
+        area->free = 0;
+        return (0);
+    }
+
+    // ATTENTION finir l'initialisation du bloc EN ENTIER. Certaines variables non initialisee peuvent etre consideree inexistante et donner une structure plus petite.
+    new_bloc->size_total = 0;
+    new_bloc->next = NULL;
+    new_bloc->prev_area = area;
+    new_bloc->magic_number = MAGIC_NUMBER_BLOC;
+    new_bloc->free = 1;
+    new_bloc->size_data = area->size_data;
+    bloc->next = new_bloc;
+//    printf("+++++++++++++++++[ft_add_next_metadata]\n");
+//    dump_mem(new_bloc, 32, 32);
+    return (1);
 }

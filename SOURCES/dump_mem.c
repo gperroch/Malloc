@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/16 12:03:19 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/11 16:10:29 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/12 13:46:58 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ void		dump_mem(void *ptr, int len, int col)
 	{
 		if (i == 0 || i % col == 0)
 			printf("%6d | %20p | ", i, ptr);
-//		if (mem[i] != 0)
-	//		printf("\033[31m");
+		if (mem[i] != 0)
+			printf("\033[31m");
 		printf("%02hhx ", mem[i]);
-	//	printf("\033[0m");
+		printf("\033[0m");
 		ptr++;
 		i++;
 		if (i == len || i % col == 0)

@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/17 15:57:43 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/12 13:01:44 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/12 15:24:20 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
  *
  * Attention : cast les pointeurs en char* avant de les incrémenter. ptr + 1 revient a faire ptr + sizeof(ptr)
- *
+ * En cas d’erreur, les fonctions malloc() et realloc() retournent un pointeur NULL
 */
 
 void 			*realloc(void *ptr, size_t size)
