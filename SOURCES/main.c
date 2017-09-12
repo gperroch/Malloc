@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 16:07:49 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/11 18:31:48 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/12 13:14:44 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int			test_malloc();
 int			test_malloc_free();
 int			test_malloc_realloc();
 int			test_malloc_free_realloc();
+int			test_realloc();
+int			test_realloc_free();
 
 int			main(int argc, char **argv)
 {
@@ -38,6 +40,14 @@ int			main(int argc, char **argv)
 	res = "NULL";
 	res = (code = test_malloc_free_realloc()) ? "FAIL" : "SUCCESS";
 	printf("%-20s: %7s (%d)\n", "test_malloc_free_realloc", res, code);
+
+	res = "NULL";
+	res = (code = test_realloc()) ? "FAIL" : "SUCCESS";
+	printf("%-20s: %7s (%d)\n", "test_realloc", res, code);
+
+	res = "NULL";
+	res = (code = test_realloc_free()) ? "FAIL" : "SUCCESS";
+	printf("%-20s: %7s (%d)\n", "test_realloc_free", res, code);
 
 	return 0;
 }
@@ -180,14 +190,74 @@ int			test_malloc_free_realloc()
 	return (0);
 }
 
-/*
-int			test_realloc()
-{
 
+int				test_realloc()
+{
+	void 		*ptr;
+	t_metadata	*bloc;
+
+	printf("\ttest_realloc 1.\n");
+	bloc = NULL;
+	ptr = realloc(NULL, 0);
+	bloc = ptr - sizeof(t_metadata);
+	if (ptr == NULL)
+		return (10);
+	if (bloc->size_total != 0)
+		return (11);
+
+	printf("\ttest_realloc 2.\n");
+	bloc = NULL;
+	ptr = realloc(NULL, 10);
+	bloc = ptr - sizeof(t_metadata);
+	if (ptr == NULL)
+		return (20);
+	if (bloc->size_total != 10)
+		return (21);
+
+	printf("\ttest_realloc 3.\n");
+	bloc = NULL;
+	ptr = realloc(NULL, -1);
+	if (ptr != NULL)
+		return (3);
+
+	return(0);
 }
 
 int			test_realloc_free()
 {
+	void 		*ptr;
+	t_metadata	*bloc;
 
+	printf("\ttest_realloc_free 1.\n");
+	bloc = NULL;
+	ptr = realloc(NULL, 0);
+	bloc = ptr - sizeof(t_metadata);
+	free(ptr);
+	if (ptr == NULL)
+		return (10);
+	if (bloc->size_total != 0)
+		return (11);
+	if (!bloc->free)
+		return (12);
+
+	printf("\ttest_realloc_free 2.\n");
+	bloc = NULL;
+	ptr = realloc(NULL, 10);
+	bloc = ptr - sizeof(t_metadata);
+	free(ptr);
+	if (ptr == NULL)
+		return (20);
+	if (bloc->size_total != 10)
+		return (21);
+	if (!bloc->free)
+		return (22);
+
+	printf("\ttest_realloc_free 3.\n");
+	bloc = NULL;
+	ptr = realloc(NULL, -1);
+	free(ptr);
+	if (ptr != NULL)
+		return (3);
+
+	return (0);
 }
-*/

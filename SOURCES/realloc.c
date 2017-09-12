@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/17 15:57:43 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/11 18:27:55 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/12 13:01:44 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ void 			*realloc(void *ptr, size_t size)
 		return (malloc(size));
 	if (ptr && !size)
 	{
+		new_alloc = malloc(size);
 		free(ptr);
-		return (malloc(size));
+		return (new_alloc);
 	}
 	// !ptr && size : call malloc(size)
 	// !ptr && !size : call malloc(0) aka malloc(size)
