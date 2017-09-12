@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 16:07:49 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/12 15:28:01 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/12 18:23:01 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,28 +27,30 @@ int			main(int argc, char **argv)
 
 	res = "NULL";
 	res = (code = test_malloc()) ? "FAIL" : "SUCCESS";
-	printf("%-20s: %7s (%d)\n", "test_malloc", res, code);
+	printf("%-30s: %7s (%d)\n", "test_malloc", res, code);
 
 	res = "NULL";
 	res = (code = test_malloc_free()) ? "FAIL" : "SUCCESS";
-	printf("%-20s: %7s (%d)\n", "test_malloc_free", res, code);
+	printf("%-30s: %7s (%d)\n", "test_malloc_free", res, code);
 
 	res = "NULL";
 	res = (code = test_malloc_realloc()) ? "FAIL" : "SUCCESS";
-	printf("%-20s: %7s (%d)\n", "test_malloc_realloc", res, code);
+	printf("%-30s: %7s (%d)\n", "test_malloc_realloc", res, code);
 
 	res = "NULL";
 	res = (code = test_malloc_free_realloc()) ? "FAIL" : "SUCCESS";
-	printf("%-20s: %7s (%d)\n", "test_malloc_free_realloc", res, code);
+	printf("%-30s: %7s (%d)\n", "test_malloc_free_realloc", res, code);
 
 	res = "NULL";
 	res = (code = test_realloc()) ? "FAIL" : "SUCCESS";
-	printf("%-20s: %7s (%d)\n", "test_realloc", res, code);
+	printf("%-30s: %7s (%d)\n", "test_realloc", res, code);
 
 	res = "NULL";
 	res = (code = test_realloc_free()) ? "FAIL" : "SUCCESS";
-	printf("%-20s: %7s (%d)\n", "test_realloc_free", res, code);
+	printf("%-30s: %7s (%d)\n", "test_realloc_free", res, code);
 
+	show_alloc_mem();
+	printf("AREA_TINY:%lu AREA_SMALL:%lu\n", AREA_TINY, AREA_SMALL);
 	return 0;
 }
 
