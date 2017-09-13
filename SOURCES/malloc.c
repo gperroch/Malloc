@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/12 17:58:18 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/13 16:02:45 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ int				ft_add_next_metadata(t_metadata *bloc, t_metadata *area)
 
 	addr_max = (((char*)area + area->size_total)
 		- (area->size_data + sizeof(t_metadata)));
-	new_bloc = (void*)bloc + sizeof(t_metadata) + bloc->size_total;
+	new_bloc = (char*)bloc + sizeof(t_metadata) + bloc->size_total;
 	if ((char*)new_bloc > addr_max)
 	{
 		area->free = 0;

@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/17 15:57:43 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/12 18:17:07 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/13 16:08:30 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #define DEBUG(x) write(1, x, ft_strlen(x));
 /*
  *
- * Attention : cast les pointeurs en char* avant de les incrémenter. ptr + 1 revient a faire ptr + sizeof(ptr)
+ * Attention : cast les pointeurs en char* avant de les incrémenter. ptr + 1 revient a faire ptr + sizeof(ptr) => CAST EN CHAR* POUR TOUTES LES OPERATIONS SUR LES ADRESSES.
  * En cas d’erreur, les fonctions malloc() et realloc() retournent un pointeur NULL
 */
 
@@ -36,25 +36,19 @@ void 			*realloc(void *ptr, size_t size)
 		free(ptr);
 		return (new_alloc);
 	}
-	// !ptr && size : call malloc(size)
-	// !ptr && !size : call malloc(0) aka malloc(size)
-	// ptr && size : reallocation normale
-	// ptr && !size : call malloc(0) et free(ptr)
-	// PROCESSUS DE REALLOCATION : ptr && size
 	bloc = ptr - sizeof(t_metadata);
 	if (bloc->magic_number != MAGIC_NUMBER_BLOC || bloc->free)
 		return (NULL);
-	if (bloc->size_total >= size)  // La taille demandee est inferieure a la taille disponible.
+	if (bloc->size_total >= size)
 		return (ptr);
-
 	size_total = bloc->size_total;
 	next_bloc = bloc->next;
 	while (next_bloc && next_bloc->magic_number == MAGIC_NUMBER_BLOC
-		&& next_bloc->free && size_total < size) // Cumule du nombre de blocs disponibles a la suite du premier.
+		&& next_bloc->free && size_total < size)
 	{
 		size_total += next_bloc->size_total + sizeof(t_metadata);
-		if (!(next_bloc->next)) // La zone n'est pas entierement mapped par des metadata, une partie reste vierge. On ajoute la taille de cette partie a la size_total.
-			size_total += (bloc->prev_area->size_total) - ((next_bloc + next_bloc->size_total) - bloc->prev_area); // Prendre la valeur absolue du deuxieme membre.
+		if (!(next_bloc->next))
+			size_total += (bloc->prev_area->size_total) - (((char*)next_bloc + next_bloc->size_total) - (char*)bloc->prev_area);
 		next_bloc = next_bloc->next;
 	}
 
@@ -63,12 +57,12 @@ void 			*realloc(void *ptr, size_t size)
 		new_alloc = malloc(size);
 		new_bloc = new_alloc - sizeof(t_metadata);
 		ft_memcpy(new_alloc, ptr, bloc->size_total);
+		//printf("\n--------------2------------------\n"); // PROBLEME ENTRE 2 ET 3, le bloc apres celui free est reinitialisé. Le probleme survient lors du test_malloc_realloc 4.
+		//show_alloc_mem();
 		bloc->free = 1;
-		new_bloc->size_total = size;
-		new_bloc->next = NULL;
-		new_bloc->prev_area = (char*)new_bloc - sizeof(t_metadata); // AJOUTER la verification du magic_number de l'area. ET modifier les metadata de cette area (area_prev par exemple).
-		// POURQUOI LE NEW_BLOC DOIT ETRE INITIALISE ICI, POURQUOI NE L'EST IL PAS CORRECTEMENT LORS DE L'APPEL DE MALLOC ???
-
+		//printf("bloc->free = 1. bloc:%p bloc->next:%p\n", bloc, bloc->next);
+		//printf("\n---------------3-----------------\n");
+		//show_alloc_mem();
 		return (new_bloc);
 	}
 	else if (size_total >= size) // Suffisament de blocs libres sont consecutifs.

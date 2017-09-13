@@ -1,36 +1,92 @@
-	test_malloc 1.
-	test_malloc 2.
-	test_malloc 3.
-	test_malloc 4.
-	test_malloc 5.
-test_malloc         : SUCCESS (0)
-	test_malloc_free 1.
-	test_malloc_free 2.
-test_malloc_free    : SUCCESS (0)
-	test_malloc_realloc 1.
-	test_malloc_realloc 2.
-	test_malloc_realloc 3.
-test_malloc_realloc : SUCCESS (0)
-	test_malloc_free_realloc 1.
-error for object 0x103852962: pointer being realloc'd was not allocated.
-test_malloc_free_realloc: SUCCESS (0)
-	test_realloc 1.
-	test_realloc 2.
-	test_realloc 3.
-test_realloc        : SUCCESS (0)
-	test_realloc_free 1.
-	test_realloc_free 2.
-	test_realloc_free 3.
-test_realloc_free   : SUCCESS (0)
-LARGE : 0x103850038
-0x103850070 - 0x103850070 : 0 octets
-0x1038500a8 - 0x1038500c8 : 32 octets
-0x103850100 - 0x103850102 : 2 octets
-0x10385013a - 0x10385292a : 10224 octets
-0x103852962 - 0x103852962 : 0 octets
-0x10385299a - 0x1038529a4 : 10 octets
-0x1038529dc - 0x1038529dc : 0 octets
-0x103852a14 - 0x103852a15 : 1 octets
-0x103852a4d - 0x103852a4d : 0 octets
-LARGE : 0x103855038
-0x103855070 - 0x103876051 : 135137 octets
+-------------1-------------------
+--------------2------------------
+TINY : 0x10e08b040
+BLOC: 0x10e08b040
+	size_total	0
+	next		0x10e08b080
+	prev_area	0x10e08b000
+	magic_number	810c
+	free		0
+	size_data	128
+0x10e08b080 - 0x10e08b080 : 0 octets
+BLOC: 0x10e08b080
+	size_total	32
+	next		0x10e08b0e0
+	prev_area	0x10e08b000
+	magic_number	810c
+	free		0
+	size_data	128
+0x10e08b0c0 - 0x10e08b0e0 : 32 octets
+BLOC: 0x10e08b0e0
+	size_total	2
+	next		0x10e08b122
+	prev_area	0x10e08b000
+	magic_number	810c
+	free		0
+	size_data	128
+0x10e08b120 - 0x10e08b122 : 2 octets
+BLOC: 0x10e08b122
+	size_total	10240
+	next		0x10e08d962
+	prev_area	0x10e08b000
+	magic_number	810c
+	free		0
+	size_data	20190
+0x10e08b162 - 0x10e08d962 : 10240 octets
+BLOC: 0x10e08d962							<=== PREMIER BLOC
+	size_total	1
+	next		0x10e08d9a3
+	prev_area	0x10e08b000
+	magic_number	810c
+	free		0
+	size_data	9886
+0x10e08d9a2 - 0x10e08d9a3 : 1 octets
+BLOC: 0x10e08d9a3
+	size_total	1
+	next		0x10e08d9e4
+	prev_area	0x10e08b000
+	magic_number	810c
+	free		0
+	size_data	128
+0x10e08d9e3 - 0x10e08d9e4 : 1 octets
+BLOC: 0x10e08d9e4
+	size_total	1
+	next		0x10e08da25
+	prev_area	0x10e08b000
+	magic_number	810c
+	free		0
+	size_data	128
+0x10e08da24 - 0x10e08da25 : 1 octets
+
+---------------3-----------------
+BLOC: 0x10e08b122
+	size_total	10240
+	next		0x10e08d962
+	prev_area	0x10e08b000
+	magic_number	810c
+	free		0
+	size_data	20190
+0x10e08b162 - 0x10e08d962 : 10240 octets
+BLOC: 0x10e08d962	--------------------<=== PREMIER BLOC
+	size_total	1
+	next		0x10e08d9a3
+	prev_area	0x10e08b000
+	magic_number	810c
+	free		1
+	size_data	9886
+BLOC: 0x10e08d9a3  ---------------------<= Ce bloc est reinitialise. Par quoi ?
+	size_total	0
+	next		0x0
+	prev_area	0x10e08b000
+	magic_number	810c
+	free		1
+	size_data	128
+LARGE : 0x119c3e040
+BLOC: 0x119c3e040
+	size_total	2147483647
+	next		0x0
+	prev_area	0x119c3e000
+	magic_number	810c
+	free		0
+	size_data	2147483647
+0x119c3e080 - 0x199c3e07f : 2147483647 octets
