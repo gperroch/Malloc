@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 16:07:49 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/12 18:23:01 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/13 13:44:46 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ int			main(int argc, char **argv)
 {
 	char	*res;
 	int		code;
+
+	printf("sizeof(t_metadata):%zu\n", sizeof(t_metadata));
+	printf("AREA_TINY:%lu\nAREA_TINY/4096:%f\nAREA_SMALL:%lu\nAREA_SMALL/4096:%f\n", AREA_TINY, (double)((double)AREA_TINY/4096), AREA_SMALL, (double)((double)AREA_SMALL/4096));
 
 	res = "NULL";
 	res = (code = test_malloc()) ? "FAIL" : "SUCCESS";
@@ -51,6 +54,7 @@ int			main(int argc, char **argv)
 
 	show_alloc_mem();
 	printf("AREA_TINY:%lu AREA_SMALL:%lu\n", AREA_TINY, AREA_SMALL);
+
 	return 0;
 }
 
