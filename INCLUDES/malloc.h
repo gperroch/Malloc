@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 09:04:59 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 10:44:08 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct			s_metadata
 }						t_metadata;
 void		*malloc(size_t size);
 void		*realloc(void *ptr, size_t size);
-void		dump_mem(void *ptr, int len, int col);
+void		dump_mem(void *ptr, int len, int col, char *name);
 void		show_alloc_mem(void);
 void		free(void *ptr);
 int			ft_find_area(void *start, t_metadata **area, size_t size);

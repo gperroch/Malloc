@@ -6,7 +6,7 @@
 #    By: tpaulmye <tpaulmye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/08/14 09:17:27 by tpaulmye          #+#    #+#              #
-#    Updated: 2017/09/12 17:54:02 by gperroch         ###   ########.fr        #
+#    Updated: 2017/09/16 09:51:45 by gperroch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ INC_PATH = ./INCLUDES/
 LIBFT = LIBFTPRINTF/LIBFTPRINTF.a
 LIB_PATH = ./LIBFTPRINTF/
 #LIB_NAMES = -lft
-CC = gcc -fsanitize=address
+CC = gcc #-fsanitize=address
 #CFLAGS = -Wall -Wextra -Werror
 
 OBJ_COREWAR_NAME = $(SRC_COREWAR_NAME:.c=.o)

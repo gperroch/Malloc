@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/16 14:52:45 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/13 16:02:54 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 10:52:59 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void			show_alloc_mem(void)
 	size_t		size_total;
 
 	ptr = malloc(1);
-	free(ptr);
 	bloc = ptr - sizeof(t_metadata);
+	free(ptr);
 	area = bloc->prev_area;
 	while (area->prev_area)
 		area = area->prev_area;
@@ -43,8 +43,19 @@ void			show_alloc_mem(void)
 			if (!bloc->free)
 				printf("%p - %p : %zu octets\n", (char*)bloc + sizeof(t_metadata), (char*)bloc + sizeof(t_metadata) + bloc->size_total, bloc->size_total);
 				//ft_printf("%p - %p : %zu octets\n", (char*)bloc + sizeof(t_metadata), (char*)bloc + sizeof(t_metadata) + bloc->size_total, bloc->size_total);
+/*			else
+			{
+				printf("BLOC->FREE:%p\n", bloc);
+				dump_mem((char*)bloc - 65, 65 * 3, 65, "show");
+			}
+			if (!bloc->next)
+			{
+				printf("BLOC FIN DE BOUCLE. bloc:%p\n", bloc);
+				//dump_mem(bloc, 65 * 4, 65);
+			}*/
 			bloc = bloc->next;
 		}
+
 		area = area->next;
 	}
 }

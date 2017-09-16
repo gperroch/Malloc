@@ -6,18 +6,12 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 09:21:13 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 10:52:39 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 #define DEBUG(x) write(1, x, ft_strlen(x));
-
-/*
- * Ajouter une verification des magic_number ici ?
- * En cas d’erreur, les fonctions malloc() et realloc() retournent un pointeur
- * NULL.
-*/
 
 void			*malloc(size_t size)
 {
@@ -40,27 +34,24 @@ void			*malloc(size_t size)
 		return (NULL);
 	if (!ft_update_metadata(bloc, size))
 		return (NULL);
-	if (size <= SMALL)
+	if (size <= SMALL && bloc->magic_number == MAGIC_NUMBER_BLOC && !bloc->next)
 		ft_add_next_metadata(bloc, area);
 	return ((void*)bloc + sizeof(t_metadata));
 }
 
-int				ft_find_bloc_area(t_metadata *area, t_metadata **target, size_t size, int bloc)
+int				ft_find_bloc_area(t_metadata *area, t_metadata **target,
+	size_t size, int bloc)
 {
 	t_metadata	*cursor;
 
 	cursor = (bloc) ? (t_metadata*)((char*)area + sizeof(t_metadata)) : area;
-//	printf("area:%p cursor:%p\n", area, cursor);
-//	DEBUG("1\n")
 	if (!area)
 		return (0);
-//	DEBUG("2\n")
 	while ((cursor->size_data < size || !cursor->free) && cursor->next)
 		cursor = cursor->next;
 	*target = cursor;
 	if (cursor->size_data >= size && cursor->free)
 		return (1);
-//	DEBUG("3\n")
 	return (0);
 }
 
@@ -70,8 +61,6 @@ int				ft_update_metadata(t_metadata *bloc, size_t size)
 		return (0);
 	bloc->free = 0;
 	bloc->size_total = size;
-	if (size <= SMALL)
-		bloc->next = bloc + size;
 	return (1);
 }
 
@@ -88,7 +77,7 @@ int				ft_size_available(t_metadata *area, t_metadata *bloc,
 	return (0);
 }
 
-int				ft_new_area(t_metadata *start, t_metadata **area, size_t size) // Ajout d'une nouvelle zone, soit en première position, soit après la dernière zone trouvée.
+int				ft_new_area(t_metadata *start, t_metadata **area, size_t size)
 {
 	char		*cursor;
 	t_metadata	*new_area;
@@ -145,7 +134,8 @@ int				ft_add_next_metadata(t_metadata *bloc, t_metadata *area)
 
 	addr_max = (((char*)area + area->size_total)
 		- (area->size_data + sizeof(t_metadata)));
-	new_bloc = (char*)bloc + sizeof(t_metadata) + bloc->size_total;
+	new_bloc = (t_metadata*)((char*)bloc + sizeof(t_metadata)
+		+ bloc->size_total);
 	if ((char*)new_bloc > addr_max)
 	{
 		area->free = 0;
@@ -157,6 +147,9 @@ int				ft_add_next_metadata(t_metadata *bloc, t_metadata *area)
 	new_bloc->magic_number = MAGIC_NUMBER_BLOC;
 	new_bloc->free = 1;
 	new_bloc->size_data = area->size_data;
+//	if (size <= SMALL) // Avant dans update_metadata
+//		bloc->next = bloc + size;
 	bloc->next = new_bloc;
+	bloc->size_data = bloc->size_total;
 	return (1);
 }
