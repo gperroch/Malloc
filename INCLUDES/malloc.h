@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 14:18:23 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 14:22:27 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,19 @@ typedef struct			s_metadata
 	size_t				size_data;
 	char				padding[24];
 }						t_metadata;
-void		*malloc(size_t size);
-void		*realloc(void *ptr, size_t size);
-void		dump_mem(void *ptr, int len, int col, char *name);
-void		show_alloc_mem(void);
-void		free(void *ptr);
-int			ft_find_area(void *start, t_metadata **area, size_t size);
-int			ft_find_bloc(t_metadata *area, t_metadata **bloc, size_t size);
-int			ft_update_metadata(t_metadata *bloc, size_t size);
-int			ft_size_available(t_metadata *area, t_metadata *bloc, size_t size);
-int			ft_new_area(t_metadata *start, t_metadata **area, size_t size);
-int			ft_add_next_metadata(t_metadata *bloc, t_metadata *area);
-void		ft_init_new_area(t_metadata *new_area, size_t size_total, size_t size);
-int			ft_find_bloc_area(t_metadata *area, t_metadata **target, size_t size, int bloc);
+void			*malloc(size_t size);
+void			*realloc(void *ptr, size_t size);
+void			dump_mem(void *ptr, int len, int col, char *name);
+void			show_alloc_mem(void);
+void			free(void *ptr);
+int				ft_find_area(void *start, t_metadata **area, size_t size);
+int				ft_find_bloc(t_metadata *area, t_metadata **bloc, size_t size);
+int				ft_update_metadata(t_metadata *bloc, size_t size);
+int				ft_size_available(t_metadata *area, t_metadata *bloc, size_t size);
+int				ft_new_area(t_metadata *start, t_metadata **area, size_t size);
+int				ft_add_next_metadata(t_metadata *bloc, t_metadata *area);
+void			ft_init_new_area(t_metadata *new_area, size_t size_total, size_t size);
+int				ft_find_bloc_area(t_metadata *area, t_metadata **target, size_t size, int bloc);
 static void 	ft_area_free(t_metadata *area);
 
 

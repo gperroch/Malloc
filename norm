@@ -1,0 +1,58 @@
+Norme: ./SOURCES/free.c
+Norme: ./SOURCES/show_alloc_mem.c
+Error (line 15): function show_alloc_mem has 44 lines
+Error (line 32): bad indentation
+Error (line 32): C++ comment
+Error (line 35): bad indentation
+Error (line 35): C++ comment
+Error (line 38): bad indentation
+Error (line 38): C++ comment
+Error (line 40): bad indentation
+Error (line 40): C++ comment
+Error (line 44): line has 155 characters
+Error (line 45): C++ comment
+Error (line 45): line has 160 characters
+Error (line 46): comment not well formatted
+Error (line 46): comment not well placed
+Error (line 58): Empty line
+Norme: ./SOURCES/realloc.c
+Error (line 14): preprocessor block must be followed by one empty line
+Error (line 15): comment not well formatted
+Error (line 17): line has 173 characters
+Error (line 18): line has 84 characters
+Error (line 20): declaration of ft_calcul_size_available forbidden in .c
+Error (line 20): line has 111 characters
+Error (line 22): Space before function name
+Error (line 22): function realloc has 59 lines
+Error (line 22): declarations in realloc must be at the top of the function
+Error (line 22, col 0): realloc has 6 variables
+Error (line 22, col 4): bad spacing
+Error (line 26): C++ comment
+Error (line 29, col 5): bad spacing
+Error (line 46): comment not well formatted
+Error (line 51): line has 129 characters
+Error (line 55): Empty line
+Error (line 56): missing newline after if
+Error (line 56): C++ comment
+Error (line 56): line has 204 characters
+Error (line 64): missing newline after if
+Error (line 64): C++ comment
+Error (line 64): line has 82 characters
+Error (line 69): Empty line
+Error (line 70): missing newline after if
+Error (line 70): C++ comment
+Error (line 70): line has 227 characters
+Error (line 74): C++ comment
+Error (line 78): C++ comment
+Error (line 78): line has 159 characters
+Error (line 79): C++ comment
+Error (line 79): line has 170 characters
+Error (line 85): line has 110 characters
+Error (line 92): line has 136 characters
+Norme: ./SOURCES/malloc.c
+Error: 7 functions in the file
+Error (line 14): preprocessor block must be followed by one empty line
+Error (line 80): function ft_new_area has 35 lines
+Error (line 107): C++ comment
+Error (line 150): C++ comment
+Error (line 151): C++ comment

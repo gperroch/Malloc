@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/17 15:57:43 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 10:38:21 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 15:02:25 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,9 @@ void 			*realloc(void *ptr, size_t size)
 	if (size_total < size) // Il n'y a pas suffisament de bloc disponibles. Malloc d'un nouveau bloc, copie des donnees. // ATTENTION aux zones qui ne sont pas encore entierement mapped par des metadata.
 	{
 		new_alloc = malloc(size);
-		new_bloc = (char*)new_alloc - sizeof(t_metadata);
+		new_bloc = (t_metadata*)((char*)new_alloc - sizeof(t_metadata));
 		ft_memcpy(new_alloc, ptr, bloc->size_total);
-//		printf("\n--------------2------------------\n"); // PROBLEME ENTRE 2 ET 3, le bloc apres celui free est reinitialisé. Le probleme survient lors du test_malloc_realloc 4.
-//		show_alloc_mem();
-//		dump_mem(bloc, 65 * 4, 65);
 		bloc->free = 1;
-		//printf("bloc->free = 1. bloc:%p bloc->next:%p\n", bloc, bloc->next);
-//		printf("\n---------------3-----------------\n");
-//		dump_mem(bloc, 65 * 4, 65);
-//		show_alloc_mem();
 		return (new_bloc);
 	}
 	else if (size_total >= size) // Suffisament de blocs libres sont consecutifs.

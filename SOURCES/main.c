@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 16:07:49 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 13:25:55 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 15:13:49 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int			test_malloc_realloc();
 int			test_malloc_free_realloc();
 int			test_realloc();
 int			test_realloc_free();
-int			test_charge();
+int			test_charge(int _free);
 
 int			main(int argc, char **argv)
 {
@@ -31,8 +31,12 @@ int			main(int argc, char **argv)
 	printf("AREA_TINY:%lu\nAREA_TINY/4096:%f\nAREA_SMALL:%lu\nAREA_SMALL/4096:%f\n", AREA_TINY, (double)((double)AREA_TINY/4096), AREA_SMALL, (double)((double)AREA_SMALL/4096));
 
 	res = "NULL";
-	res = (code = test_charge()) ? "FAIL" : "SUCCESS";
-	printf("%-30s: %7s (%d)\n", "test_charge", res, code);
+	res = (code = test_charge(1)) ? "FAIL" : "SUCCESS";
+	printf("%-30s: %7s (%d)\n", "test_charge avec free", res, code);
+
+//	res = "NULL";
+//	res = (code = test_charge(0)) ? "FAIL" : "SUCCESS";
+//	printf("%-30s: %7s (%d)\n", "test_charge sans free", res, code);
 
 	res = "NULL";
 	res = (code = test_malloc()) ? "FAIL" : "SUCCESS";
@@ -64,7 +68,7 @@ int			main(int argc, char **argv)
 	return 0;
 }
 
-int				test_charge()
+int				test_charge(int _free)
 {
 	char		*ptr;
 	size_t		size;
@@ -76,8 +80,7 @@ int				test_charge()
 	ptr = NULL;
 	while (limit--)
 	{
-//		printf("limit:%d ptr:%p\n", limit, ptr);
-		if (ptr != NULL)
+		if (ptr != NULL && _free)
 			free(ptr);
 		ptr = malloc(size);
 	}
@@ -88,8 +91,7 @@ int				test_charge()
 	ptr = NULL;
 	while (limit--)
 	{
-//		printf("limit:%d ptr:%p\n", limit, ptr);
-		if (ptr != NULL)
+		if (ptr != NULL && _free)
 			free(ptr);
 		ptr = malloc(size);
 	}
@@ -100,8 +102,7 @@ int				test_charge()
 	ptr = NULL;
 	while (limit--)
 	{
-//		printf("limit:%d ptr:%p\n", limit, ptr);
-		if (ptr != NULL)
+		if (ptr != NULL && _free)
 			free(ptr);
 		ptr = malloc(size);
 	}
@@ -112,8 +113,7 @@ int				test_charge()
 	ptr = NULL;
 	while (limit--)
 	{
-//		printf("limit:%d ptr:%p\n", limit, ptr);
-		if (ptr != NULL)
+		if (ptr != NULL && _free)
 			free(ptr);
 		ptr = malloc(size + limit);
 	}
@@ -280,7 +280,6 @@ int			test_malloc_realloc() // Verifier que les donnees sont bien recopiees lors
 		return (40);
 	if (bloc->size_data < new_size)
 		return (41);
-
 
 	return (0);
 }
