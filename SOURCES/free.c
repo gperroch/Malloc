@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/16 16:30:24 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 14:06:11 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 14:21:05 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,25 @@ void			free(void *ptr)
 			bloc = bloc->next;
 		}
 		if (area_free)
-		{
-			if (!area->prev_area)
-				g_start = NULL;
-			else
-				(area->prev_area)->next = NULL;
-			munmap(area, area->size_total);
-		}
+			ft_area_free(area);
 	}
+}
+
+static void		ft_area_free(t_metadata *area)
+{
+	if (!area->prev_area && !area->next)
+		g_start = NULL;
+	else if (!area->prev_area && area->next)
+	{
+		g_start = area->next;
+		(area->next)->prev_area = NULL;
+	}
+	else if (area->prev_area && !area->next)
+		(area->prev_area)->next = NULL;
+	else if (area->prev_area && area->next)
+	{
+		(area->prev_area)->next = area->next;
+		(area->next)->prev_area = area->prev_area;
+	}
+	munmap(area, area->size_total);
 }
