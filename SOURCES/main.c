@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 16:07:49 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/13 16:07:50 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 08:53:18 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,38 +60,65 @@ int			main(int argc, char **argv)
 
 int			test_malloc()
 {
-	void 	*ptr;
+	void 		*ptr;
+	long int	size;
 
 	ptr = NULL;
 
 	printf("\ttest_malloc 1.\n");
-	ptr = malloc(0);
+	size = 0;
+	ptr = malloc(size);
 	if (!ptr)
 		return (1);
 	ptr = NULL;
 
 	printf("\ttest_malloc 2.\n");
-	ptr = malloc(-1);
+	size = -1;
+	ptr = malloc(size);
 	if (ptr)
 		return (2);
 	ptr = NULL;
 
 	printf("\ttest_malloc 3.\n");
-	ptr = malloc(32);
+	size = 32;
+	ptr = malloc(size);
 	if (!ptr)
 		return (3);
 	ptr = NULL;
 
 	printf("\ttest_malloc 4.\n");
-	ptr = malloc(2147483647);
+	size = 2147483647;
+	ptr = malloc(size);
 	if (!ptr)
 		return (4);
 	ptr = NULL;
 
 	printf("\ttest_malloc 5.\n");
-	ptr = malloc(2147483648); // Le vrai malloc sort un code d'erreur(3). Le passage en size_t doit donner une valeur trop elevee pour toute allocation (size=18446744071562067968)
-	if (ptr)
+	size = 2147483648;
+	ptr = malloc(size);
+	if (!ptr)
 		return (5);
+	ptr = NULL;
+
+	printf("\ttest_malloc 6.\n");
+	size = -2147483648;
+	ptr = malloc(size);
+	if (ptr)
+		return (6);
+	ptr = NULL;
+
+	printf("\ttest_malloc 7.\n");
+	size = -2147483649;
+	ptr = malloc(size);
+	if (ptr)
+		return (7);
+	ptr = NULL;
+
+	printf("\ttest_malloc 8.\n");
+	size = -32;
+	ptr = malloc(size);
+	if (ptr)
+		return (8);
 	ptr = NULL;
 
 	return (0);

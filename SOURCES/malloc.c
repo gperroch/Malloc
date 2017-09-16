@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/13 16:02:45 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 09:06:31 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,6 @@
  * Ajouter une verification des magic_number ici ?
  * En cas d’erreur, les fonctions malloc() et realloc() retournent un pointeur
  * NULL.
- * ft_find_area : renvoie 0 si aucune zone n'est disponible.
- * ft_new_area  : cree une nouvelle zone.
- * ft_find_bloc : trouve le premier bloc disponible dans la zone determinee.
- * ft_update_metadata : met a jour les metadata du bloc trouve.
- * ft_add_next_metadata : prepare le prochain bloc si size <= SMALL.
 */
 
 void			*malloc(size_t size)
@@ -32,31 +27,27 @@ void			*malloc(size_t size)
 
 	area = NULL;
 	bloc = NULL;
-	/* ATTENTION: sans le cast en int, le test malloc(-1) est passant alors
-	 * qu'il ne devrait pas l'etre. Probleme de type en size_t et int a regler.
-	 * Necessaire pour le malloc(2147483648) aussi.
-	*/
-	if ((int)size < 0)
+	if ((long long)size < 0)
 		return (NULL);
-	if (!ft_find_area(start, &area, size))
+	if (!ft_find_bloc_area(start, &area, size, 0))
 	{
 		if (!ft_new_area(start, &area, size))
 			return (NULL);
 		if (!start)
 			start = area;
 	}
-	ft_find_bloc(area, &bloc, size);
+	ft_find_bloc_area(area, &bloc, size, 1);
 	ft_update_metadata(bloc, size); // Cas d'erreurs à faire.
 	if (size <= SMALL)
 		ft_add_next_metadata(bloc, area);
 	return ((void*)bloc + sizeof(t_metadata));
 }
-
+/*
 int				ft_find_area(void *start, t_metadata **area, size_t size)
 {
 	t_metadata	*cursor;
 
-	cursor = (void*)start;
+	cursor = start;
 	if (!start)
 		return (0);
 	while ((cursor->size_data < size || !cursor->free) && cursor->next)
@@ -72,12 +63,27 @@ int				ft_find_bloc(t_metadata *area, t_metadata **bloc, size_t size) // Mutuali
 	t_metadata	*cursor;
 
 	cursor = (void*)area + sizeof(t_metadata);
-	while ((cursor->size_total < size || !cursor->free) && cursor->next)
-	//while ((cursor->size_data < size || !cursor->free) && cursor->next)
+	//while ((cursor->size_total < size || !cursor->free) && cursor->next)
+	while ((cursor->size_data < size || !cursor->free) && cursor->next)
 		cursor = cursor->next;
 	*bloc = cursor;
-	if (cursor->size_total >= size && cursor->free)
-	//if (cursor->size_data >= size && cursor->free)
+	//if (cursor->size_total >= size && cursor->free)
+	if (cursor->size_data >= size && cursor->free)
+		return (1);
+	return (0);
+}
+*/
+int				ft_find_bloc_area(t_metadata *area, t_metadata **target, size_t size, int bloc)
+{
+	t_metadata	*cursor;
+
+	cursor = (bloc) ? (t_metadata*)((char*)area + sizeof(t_metadata)) : area;
+	if (!area)
+		return (0);
+	while ((cursor->size_data < size || !cursor->free) && cursor->next)
+		cursor = cursor->next;
+	*target = cursor;
+	if (cursor->size_data >= size && cursor->free)
 		return (1);
 	return (0);
 }
