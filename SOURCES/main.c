@@ -6,11 +6,12 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 16:07:49 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 10:58:31 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 13:25:55 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
+#include <limits.h>
 
 #define DEBUG(x) printf("[DEBUG] %s\n", x);
 int			test_malloc();
@@ -19,6 +20,7 @@ int			test_malloc_realloc();
 int			test_malloc_free_realloc();
 int			test_realloc();
 int			test_realloc_free();
+int			test_charge();
 
 int			main(int argc, char **argv)
 {
@@ -27,6 +29,10 @@ int			main(int argc, char **argv)
 
 	printf("sizeof(t_metadata):%zu\n", sizeof(t_metadata));
 	printf("AREA_TINY:%lu\nAREA_TINY/4096:%f\nAREA_SMALL:%lu\nAREA_SMALL/4096:%f\n", AREA_TINY, (double)((double)AREA_TINY/4096), AREA_SMALL, (double)((double)AREA_SMALL/4096));
+
+	res = "NULL";
+	res = (code = test_charge()) ? "FAIL" : "SUCCESS";
+	printf("%-30s: %7s (%d)\n", "test_charge", res, code);
 
 	res = "NULL";
 	res = (code = test_malloc()) ? "FAIL" : "SUCCESS";
@@ -56,6 +62,62 @@ int			main(int argc, char **argv)
 	printf("AREA_TINY:%lu AREA_SMALL:%lu\n", AREA_TINY, AREA_SMALL);
 
 	return 0;
+}
+
+int				test_charge()
+{
+	char		*ptr;
+	size_t		size;
+	int			limit;
+
+	limit = 10000;
+	size = 127;
+
+	ptr = NULL;
+	while (limit--)
+	{
+//		printf("limit:%d ptr:%p\n", limit, ptr);
+		if (ptr != NULL)
+			free(ptr);
+		ptr = malloc(size);
+	}
+
+	limit = 10000;
+	size = 1023;
+
+	ptr = NULL;
+	while (limit--)
+	{
+//		printf("limit:%d ptr:%p\n", limit, ptr);
+		if (ptr != NULL)
+			free(ptr);
+		ptr = malloc(size);
+	}
+
+	limit = 10000;
+	size = 1025;
+
+	ptr = NULL;
+	while (limit--)
+	{
+//		printf("limit:%d ptr:%p\n", limit, ptr);
+		if (ptr != NULL)
+			free(ptr);
+		ptr = malloc(size);
+	}
+
+	limit = 10000;
+	size = 1;
+
+	ptr = NULL;
+	while (limit--)
+	{
+//		printf("limit:%d ptr:%p\n", limit, ptr);
+		if (ptr != NULL)
+			free(ptr);
+		ptr = malloc(size + limit);
+	}
+	return (0);
 }
 
 int			test_malloc()

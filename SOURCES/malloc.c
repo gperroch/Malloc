@@ -6,16 +6,16 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 10:52:39 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 14:08:10 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 #define DEBUG(x) write(1, x, ft_strlen(x));
+void *g_start = NULL;
 
 void			*malloc(size_t size)
 {
-	static void	*start = NULL;
 	t_metadata	*area;
 	t_metadata	*bloc;
 
@@ -23,12 +23,12 @@ void			*malloc(size_t size)
 	bloc = NULL;
 	if ((long long)size < 0)
 		return (NULL);
-	if (!ft_find_bloc_area(start, &area, size, 0))
+	if (!ft_find_bloc_area(g_start, &area, size, 0))
 	{
-		if (!ft_new_area(start, &area, size))
+		if (!ft_new_area(g_start, &area, size))
 			return (NULL);
-		if (!start)
-			start = area;
+		if (!g_start)
+			g_start = area;
 	}
 	if (!ft_find_bloc_area(area, &bloc, size, 1))
 		return (NULL);

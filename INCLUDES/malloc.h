@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 10:44:08 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 13:35:37 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
  * size_data  - BLOC : correspond a la taille maximum du bloc. AREA : comme pour les BLOC.
  *
  */
+
+extern void *g_start;
 
 typedef struct			s_metadata
 {
