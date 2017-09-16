@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gperroch <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/28 11:14:25 by gperroch          #+#    #+#              #
-#    Updated: 2016/04/08 14:55:48 by gperroch         ###   ########.fr        #
+#    Updated: 2017/09/16 17:58:36 by gperroch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ SRC_NAMES =	ft_isprint.c \
    	   		ft_putchar_fd.c \
    	   		ft_strchr.c \
    	   		ft_striteri.c \
+			ft_putunbr.c \
    	   		ft_strnequ.c \
    	   		ft_toupper.c \
 	   		ft_isalpha.c \
@@ -115,7 +116,7 @@ SRC_NAMES =	ft_isprint.c \
 			ft_tabjoin_int.c \
 			ft_tabjoin_tabstr.c \
 			get_next_line.c
-			
+
 OBJ_NAMES =	$(SRC_NAMES:.c=.o)
 
 INC_NAMES = libftprintf.h
@@ -132,7 +133,7 @@ $(NAME): $(OBJ)
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	@gcc $(CFLAGS) -c $<
 
-clean : 
+clean :
 	@rm -f $(OBJ_NAMES)
 
 fclean : clean

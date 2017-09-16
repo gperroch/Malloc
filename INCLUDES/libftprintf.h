@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libftprintf.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gperroch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/17 10:45:55 by gperroch          #+#    #+#             */
-/*   Updated: 2016/03/25 11:48:15 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 18:00:40 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void					ft_putnbr(int n);
 void					ft_putnbr_fd(int n, int fd);
 void					ft_putstr(char const *s);
 void					ft_putstr_fd(char const *s, int fd);
+void					ft_putunbr(uintmax_t n);
 double					ft_sqrt(double nb);
 char					*ft_strcat(char *s1, const char *s2);
 char					*ft_strchr(const char *s, int c);

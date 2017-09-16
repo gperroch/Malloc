@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 14:22:27 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 18:18:56 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ int				ft_add_next_metadata(t_metadata *bloc, t_metadata *area);
 void			ft_init_new_area(t_metadata *new_area, size_t size_total, size_t size);
 int				ft_find_bloc_area(t_metadata *area, t_metadata **target, size_t size, int bloc);
 static void 	ft_area_free(t_metadata *area);
-
+static void 			ft_print_area(char *str, t_metadata *bloc);
+static uintmax_t		ft_address(void *ptr);
+static void			ft_display_addr(void *ptr);
+static void 			ft_print_bloc(t_metadata *bloc);
 
 
 #endif

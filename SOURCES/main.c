@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 16:07:49 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 15:13:49 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 18:16:24 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,8 +272,8 @@ int			test_malloc_realloc() // Verifier que les donnees sont bien recopiees lors
 	printf("\ttest_malloc_realloc 4.\n");
 	ptr = malloc(first_size);
 	bloc = ptr - sizeof(t_metadata);
-	while (--i)
-		ptr2 = malloc(first_size);
+//	while (--i)
+//		ptr2 = malloc(first_size);
 	ptr2 = realloc(ptr, new_size); //<-- PROBLEME. Rapport a la realocation du test 3. Un morceau de bloc ce trouve ecrit dans la premiere allocation du test 4.
 	bloc = ptr2 - sizeof(t_metadata);
 	if (ptr - ptr2 == 0x0)
