@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 09:06:31 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/16 09:21:13 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,65 +36,43 @@ void			*malloc(size_t size)
 		if (!start)
 			start = area;
 	}
-	ft_find_bloc_area(area, &bloc, size, 1);
-	ft_update_metadata(bloc, size); // Cas d'erreurs à faire.
+	if (!ft_find_bloc_area(area, &bloc, size, 1))
+		return (NULL);
+	if (!ft_update_metadata(bloc, size))
+		return (NULL);
 	if (size <= SMALL)
 		ft_add_next_metadata(bloc, area);
 	return ((void*)bloc + sizeof(t_metadata));
 }
-/*
-int				ft_find_area(void *start, t_metadata **area, size_t size)
-{
-	t_metadata	*cursor;
 
-	cursor = start;
-	if (!start)
-		return (0);
-	while ((cursor->size_data < size || !cursor->free) && cursor->next)
-		cursor = cursor->next;
-	*area = cursor;
-	if (cursor->size_data >= size && cursor->free)
-		return (1);
-	return (0);
-}
-
-int				ft_find_bloc(t_metadata *area, t_metadata **bloc, size_t size) // Mutualiser ft_find_bloc et ft_find_area quand bloc et area auront la meme structure. S'assurer du bon fonctionnement avec size_data (au lieu de size_total, pour mutualiser)
-{
-	t_metadata	*cursor;
-
-	cursor = (void*)area + sizeof(t_metadata);
-	//while ((cursor->size_total < size || !cursor->free) && cursor->next)
-	while ((cursor->size_data < size || !cursor->free) && cursor->next)
-		cursor = cursor->next;
-	*bloc = cursor;
-	//if (cursor->size_total >= size && cursor->free)
-	if (cursor->size_data >= size && cursor->free)
-		return (1);
-	return (0);
-}
-*/
 int				ft_find_bloc_area(t_metadata *area, t_metadata **target, size_t size, int bloc)
 {
 	t_metadata	*cursor;
 
 	cursor = (bloc) ? (t_metadata*)((char*)area + sizeof(t_metadata)) : area;
+//	printf("area:%p cursor:%p\n", area, cursor);
+//	DEBUG("1\n")
 	if (!area)
 		return (0);
+//	DEBUG("2\n")
 	while ((cursor->size_data < size || !cursor->free) && cursor->next)
 		cursor = cursor->next;
 	*target = cursor;
 	if (cursor->size_data >= size && cursor->free)
 		return (1);
+//	DEBUG("3\n")
 	return (0);
 }
 
 int				ft_update_metadata(t_metadata *bloc, size_t size)
 {
+	if (bloc->magic_number != MAGIC_NUMBER_BLOC)
+		return (0);
 	bloc->free = 0;
 	bloc->size_total = size;
 	if (size <= SMALL)
 		bloc->next = bloc + size;
-	return (0);
+	return (1);
 }
 
 int				ft_size_available(t_metadata *area, t_metadata *bloc,
@@ -144,7 +122,7 @@ int				ft_new_area(t_metadata *start, t_metadata **area, size_t size) // Ajout d
 	first_bloc.prev_area = new_area;
 	first_bloc.size_data = new_area->size_data;
 	first_bloc.next = NULL;
-	first_bloc.free = 0;
+	first_bloc.free = 1;
 	*((t_metadata*)cursor) = first_bloc;
 	return (1);
 }
