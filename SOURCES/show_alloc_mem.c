@@ -6,22 +6,19 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/16 14:52:45 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 18:21:37 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 09:45:13 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-void			show_alloc_mem(void)
+void				show_alloc_mem(void)
 {
-	void		*ptr;
-	t_metadata	*bloc;
-	t_metadata	*area;
-	size_t		size_total;
+	t_metadata		*bloc;
+	t_metadata		*area;
 
-	ptr = malloc(1);
-	bloc = ptr - sizeof(t_metadata);
-	free(ptr);
+	free(bloc = malloc(1));
+	bloc = (t_metadata*)((char*)bloc - sizeof(t_metadata));
 	area = bloc->prev_area;
 	while (area->prev_area)
 		area = area->prev_area;
@@ -46,11 +43,11 @@ void			show_alloc_mem(void)
 
 static void			ft_display_addr(void *ptr)
 {
-	int			i;
-	uintmax_t	rem;
-	uintmax_t	num;
-	char		str[9];
-	int			base;
+	int				i;
+	uintmax_t		rem;
+	uintmax_t		num;
+	char			str[9];
+	int				base;
 
 	num = ft_address(ptr);
 	base = 16;
@@ -58,10 +55,9 @@ static void			ft_display_addr(void *ptr)
 	rem = num;
 	ft_memset(&str, '0', 10);
 	if (num == 0)
-	{
 		write(1, "0", 1);
+	if (num == 0)
 		return ;
-	}
 	while ((rem = rem / base) != 0)
 		i++;
 	while (num != 0)
@@ -74,7 +70,7 @@ static void			ft_display_addr(void *ptr)
 	write(1, &str, 9);
 }
 
-static uintmax_t		ft_address(void *ptr)
+static uintmax_t	ft_address(void *ptr)
 {
 	uintmax_t		mask;
 	uintmax_t		num;
