@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/16 14:52:45 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/19 09:45:13 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 11:39:10 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,7 @@ void				show_alloc_mem(void)
 	t_metadata		*bloc;
 	t_metadata		*area;
 
-	free(bloc = malloc(1));
-	bloc = (t_metadata*)((char*)bloc - sizeof(t_metadata));
-	area = bloc->prev_area;
-	while (area->prev_area)
-		area = area->prev_area;
+	area = g_start;
 	while (area && area->magic_number == MAGIC_NUMBER_AREA)
 	{
 		bloc = (t_metadata*)((char*)area + sizeof(t_metadata));

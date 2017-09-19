@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 16:07:49 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/19 09:35:02 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 11:38:16 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ int			main(int argc, char **argv)
 	res = (code = test_charge(1)) ? "FAIL" : "SUCCESS";
 	printf("%-30s: %7s (%d)\n", "test_charge avec free", res, code);
 
-//	res = "NULL";
-//	res = (code = test_charge(0)) ? "FAIL" : "SUCCESS";
-//	printf("%-30s: %7s (%d)\n", "test_charge sans free", res, code);
-
+/*	res = "NULL";
+	res = (code = test_charge(0)) ? "FAIL" : "SUCCESS";
+	printf("%-30s: %7s (%d)\n", "test_charge sans free", res, code);
+*/
 	res = "NULL";
 	res = (code = test_malloc()) ? "FAIL" : "SUCCESS";
 	printf("%-30s: %7s (%d)\n", "test_malloc", res, code);
@@ -272,9 +272,9 @@ int			test_malloc_realloc() // Verifier que les donnees sont bien recopiees lors
 	printf("\ttest_malloc_realloc 4.\n");
 	ptr = malloc(first_size);
 	bloc = ptr - sizeof(t_metadata);
-//	while (--i)
-//		ptr2 = malloc(first_size);
-	ptr2 = realloc(ptr, new_size); //<-- PROBLEME. Rapport a la realocation du test 3. Un morceau de bloc ce trouve ecrit dans la premiere allocation du test 4.
+	while (--i)
+		ptr2 = malloc(first_size);
+	ptr2 = realloc(ptr, new_size);
 	bloc = ptr2 - sizeof(t_metadata);
 	if (ptr - ptr2 == 0x0)
 		return (40);
