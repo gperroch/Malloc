@@ -6,13 +6,13 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/20 09:58:08 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/19 10:00:50 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 10:48:26 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
-#define DEBUG(x) write(1, x, ft_strlen(x));
-void *g_start = NULL;
+
+void			*g_start = NULL;
 
 void			*malloc(size_t size)
 {
@@ -97,8 +97,6 @@ int				ft_add_next_metadata(t_metadata *bloc, t_metadata *area)
 	new_bloc->magic_number = MAGIC_NUMBER_BLOC;
 	new_bloc->free = 1;
 	new_bloc->size_data = area->size_data;
-//	if (size <= SMALL) // Avant dans update_metadata
-//		bloc->next = bloc + size;
 	bloc->next = new_bloc;
 	bloc->size_data = bloc->size_total;
 	return (1);
