@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 18:18:56 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 10:06:39 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,15 @@ int				ft_update_metadata(t_metadata *bloc, size_t size);
 int				ft_size_available(t_metadata *area, t_metadata *bloc, size_t size);
 int				ft_new_area(t_metadata *start, t_metadata **area, size_t size);
 int				ft_add_next_metadata(t_metadata *bloc, t_metadata *area);
-void			ft_init_new_area(t_metadata *new_area, size_t size_total, size_t size);
 int				ft_find_bloc_area(t_metadata *area, t_metadata **target, size_t size, int bloc);
 static void 	ft_area_free(t_metadata *area);
 static void 			ft_print_area(char *str, t_metadata *bloc);
 static uintmax_t		ft_address(void *ptr);
 static void			ft_display_addr(void *ptr);
 static void 			ft_print_bloc(t_metadata *bloc);
-
+static	void	ft_init_first_bloc(t_metadata *first_bloc, t_metadata *new_area);
+int				ft_new_area(t_metadata *start, t_metadata **area, size_t size);
+static void			ft_init_new_area(t_metadata *new_area, size_t size_total, size_t size);
+static void			ft_add_to_last_area(t_metadata *start, t_metadata *new_area);
 
 #endif

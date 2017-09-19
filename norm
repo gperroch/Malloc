@@ -1,3 +1,6 @@
+Norme: ./SOURCES/ft_new_area.c
+Error: global scope bad aligned
+Error (line 15): function ft_new_area has 29 lines
 Norme: ./SOURCES/realloc.c
 Error (line 14): preprocessor block must be followed by one empty line
 Error (line 15): comment not well formatted
@@ -33,16 +36,10 @@ Error (line 79): line has 170 characters
 Error (line 85): line has 110 characters
 Error (line 92): line has 136 characters
 Norme: ./SOURCES/show_alloc_mem.c
-Error: global scope bad aligned
-Error (line 15): function show_alloc_mem has 28 lines
-Error (line 47): function ft_display_addr has 26 lines
 Norme: ./SOURCES/malloc.c
-Error: 7 functions in the file
 Error (line 14): preprocessor block must be followed by one empty line
-Error (line 80): function ft_new_area has 35 lines
-Error (line 107): C++ comment
-Error (line 150): C++ comment
-Error (line 151): C++ comment
+Error (line 100): C++ comment
+Error (line 101): C++ comment
 Norme: ./SOURCES/main.c
 Error: global scope bad aligned
 Error: 8 functions in the file

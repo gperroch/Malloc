@@ -6,7 +6,7 @@
 #    By: tpaulmye <tpaulmye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/08/14 09:17:27 by tpaulmye          #+#    #+#              #
-#    Updated: 2017/09/16 14:55:59 by gperroch         ###   ########.fr        #
+#    Updated: 2017/09/19 10:00:25 by gperroch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,14 +18,15 @@ SRC_COREWAR_NAME =	main.c \
 					free.c \
 					dump_mem.c \
 					realloc.c \
-					show_alloc_mem.c
+					show_alloc_mem.c \
+					ft_new_area.c
 
 OBJ_COREWAR_PATH = ./OBJECTS/
 INC_PATH = ./INCLUDES/
 LIBFT = LIBFTPRINTF/LIBFTPRINTF.a
 LIB_PATH = ./LIBFTPRINTF/
 #LIB_NAMES = -lft
-CC = gcc -fsanitize=address 
+CC = gcc -fsanitize=address
 #CFLAGS = -Wall -Wextra -Werror
 
 OBJ_COREWAR_NAME = $(SRC_COREWAR_NAME:.c=.o)
