@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/16 14:52:45 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/19 12:32:27 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 13:01:40 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void			ft_display_addr(void *ptr)
 	base = 16;
 	i = 0;
 	rem = num;
-	ft_memset(&str, '0', 10);
+	ft_memset(&str, '0', 9);
 	if (num == 0)
 		write(1, "0", 1);
 	if (num == 0)
