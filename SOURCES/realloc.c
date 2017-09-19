@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/17 15:57:43 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/19 12:31:43 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 15:02:12 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void			*realloc(void *ptr, size_t size)
 	return (ptr);
 }
 
-int		ft_calcul_size_available(t_metadata **next_bloc,
+int				ft_calcul_size_available(t_metadata **next_bloc,
 	size_t *size_total, size_t size, t_metadata *bloc)
 {
 	while (*next_bloc && (*next_bloc)->magic_number == MAGIC_NUMBER_BLOC
@@ -52,7 +52,7 @@ int		ft_calcul_size_available(t_metadata **next_bloc,
 	return (0);
 }
 
-void		*ft_new_allocation(void *ptr, size_t size)
+void			*ft_new_allocation(void *ptr, size_t size)
 {
 	void		*new_alloc;
 	t_metadata	*bloc;
@@ -67,7 +67,7 @@ void		*ft_new_allocation(void *ptr, size_t size)
 	return (new_alloc);
 }
 
-int		ft_add_extra_bloc(void *ptr, size_t size, size_t size_total,
+int				ft_add_extra_bloc(void *ptr, size_t size, size_t size_total,
 	t_metadata *bloc)
 {
 	t_metadata	*extra_bloc_addr;

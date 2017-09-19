@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/19 14:59:25 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 15:01:08 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,6 @@ int						ft_add_extra_bloc(void *ptr, size_t size,
 int						ft_calcul_size_available(t_metadata **next_bloc,
 	size_t *size_total, size_t size, t_metadata *bloc);
 void					*ft_new_allocation(void *ptr, size_t size);
-size_t			ft_area_init_size(int data_size);
+size_t					ft_area_init_size(int data_size);
 
 #endif

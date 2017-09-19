@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/19 09:53:26 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/19 14:58:12 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 15:03:34 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int				ft_new_area(t_metadata *start, t_metadata **area, size_t size)
 	return (1);
 }
 
-void	ft_init_first_bloc(t_metadata *first_bloc, t_metadata *new_area)
+void			ft_init_first_bloc(t_metadata *first_bloc, t_metadata *new_area)
 {
 	ft_memset(first_bloc, 0, sizeof(t_metadata));
 	first_bloc->magic_number = MAGIC_NUMBER_BLOC;
@@ -48,7 +48,7 @@ void	ft_init_first_bloc(t_metadata *first_bloc, t_metadata *new_area)
 	first_bloc->free = 1;
 }
 
-void		ft_init_new_area(t_metadata *new_area, size_t size_total,
+void			ft_init_new_area(t_metadata *new_area, size_t size_total,
 	size_t size)
 {
 	new_area->prev_area = NULL;
@@ -59,7 +59,7 @@ void		ft_init_new_area(t_metadata *new_area, size_t size_total,
 	new_area->magic_number = MAGIC_NUMBER_AREA;
 }
 
-void		ft_add_to_last_area(t_metadata *start, t_metadata *new_area)
+void			ft_add_to_last_area(t_metadata *start, t_metadata *new_area)
 {
 	t_metadata	*tmp;
 
@@ -70,7 +70,7 @@ void		ft_add_to_last_area(t_metadata *start, t_metadata *new_area)
 	new_area->prev_area = tmp;
 }
 
-size_t		ft_area_init_size(int data_size)
+size_t			ft_area_init_size(int data_size)
 {
 	int		bloc_size;
 	int		factor;
