@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/16 16:30:24 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 14:56:24 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 12:31:07 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void			free(void *ptr)
 	}
 }
 
-static void		ft_area_free(t_metadata *area)
+void		ft_area_free(t_metadata *area)
 {
 	if (!area->prev_area && !area->next)
 		g_start = NULL;

@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/16 14:52:45 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/19 11:39:10 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 12:32:27 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void				show_alloc_mem(void)
 	}
 }
 
-static void			ft_display_addr(void *ptr)
+void			ft_display_addr(void *ptr)
 {
 	int				i;
 	uintmax_t		rem;
@@ -66,7 +66,7 @@ static void			ft_display_addr(void *ptr)
 	write(1, &str, 9);
 }
 
-static uintmax_t	ft_address(void *ptr)
+uintmax_t	ft_address(void *ptr)
 {
 	uintmax_t		mask;
 	uintmax_t		num;
@@ -84,14 +84,14 @@ static uintmax_t	ft_address(void *ptr)
 	return (num);
 }
 
-static void			ft_print_area(char *str, t_metadata *bloc)
+void			ft_print_area(char *str, t_metadata *bloc)
 {
 	ft_putstr(str);
 	ft_display_addr(bloc);
 	ft_putstr("\n");
 }
 
-static void			ft_print_bloc(t_metadata *bloc)
+void			ft_print_bloc(t_metadata *bloc)
 {
 	ft_display_addr((char*)bloc + sizeof(t_metadata));
 	ft_putstr(" - ");

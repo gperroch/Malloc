@@ -3,17 +3,18 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tpaulmye <tpaulmye@student.42.fr>          +#+  +:+       +#+         #
+#    By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2015/08/14 09:17:27 by tpaulmye          #+#    #+#              #
-#    Updated: 2017/09/19 12:34:54 by gperroch         ###   ########.fr        #
+#    Created: 2017/09/19 12:25:07 by gperroch          #+#    #+#              #
+#    Updated: 2017/09/19 12:25:08 by gperroch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME_COREWAR = malloc.so
+NAME_COREWAR = malloc.out
 
 SRC_COREWAR_PATH = ./SOURCES/
-SRC_COREWAR_NAME =	malloc.c \
+SRC_COREWAR_NAME =	main_test_malloc.c \
+					malloc.c \
 					free.c \
 					dump_mem.c \
 					realloc.c \
@@ -25,8 +26,8 @@ INC_PATH = ./INCLUDES/
 LIBFT = LIBFTPRINTF/LIBFTPRINTF.a
 LIB_PATH = ./LIBFTPRINTF/
 #LIB_NAMES = -lft
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -fPIC
+CC = gcc -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 
 OBJ_COREWAR_NAME = $(SRC_COREWAR_NAME:.c=.o)
 OBJ_COREWAR = $(addprefix $(OBJ_COREWAR_PATH),$(OBJ_COREWAR_NAME))
@@ -40,7 +41,7 @@ LDFLAGS = $(LIB) #$(LIB_NAMES)
 all: $(LIBFT) $(NAME_COREWAR)
 
 $(NAME_COREWAR): $(LIBFT) $(OBJ_COREWAR)
-	@$(CC) $^ -shared -o $@ $(LDFLAGS)
+	@$(CC) $^ -o $@ $(LDFLAGS)
 	@echo "$(NAME_COREWAR) complete ! 🍻 "
 
 $(OBJ_COREWAR_PATH)%.o: $(SRC_COREWAR_PATH)%.c

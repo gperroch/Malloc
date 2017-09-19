@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_test_malloc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 16:07:49 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/19 12:09:28 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 12:22:59 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int			test_realloc();
 int			test_realloc_free();
 int			test_charge(int _free);
 
-int			main(int argc, char **argv)
+int			main()
 {
 	char	*res;
 	int		code;
@@ -132,7 +132,6 @@ int			test_malloc()
 	ptr = malloc(size);
 	if (!ptr)
 		return (1);
-	dump_mem((char*)ptr - SIZE_METADATA, 64 * 4, 64, "dump1");
 	ptr = NULL;
 
 	printf("\ttest_malloc 2.\n");
