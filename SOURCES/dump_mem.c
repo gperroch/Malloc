@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/16 12:03:19 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/16 10:43:28 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 12:09:50 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,11 @@ void		dump_mem(void *ptr, int len, int col, char *name)
 
 	i = 0;
 	mem = ptr;
-	printf("%6s |----------------------|  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32\n", name);
+	printf("%6s |----------------------| ", name);
+	while (i++ < col)
+		printf("%2d ", i);
+	printf("\n");
+	i = 0;
 	while (i < len)
 	{
 		if (i == 0 || i % col == 0)

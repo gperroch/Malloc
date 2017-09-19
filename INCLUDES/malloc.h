@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/19 11:32:38 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 11:41:07 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define TINY 128
 # define SMALL 1024
 # define SIZE_METADATA sizeof(t_metadata)
-# define AREA_TINY (((TINY + SIZE_METADATA) * 106) + SIZE_METADATA + 64)
+# define AREA_TINY (((TINY + SIZE_METADATA) * 106) + SIZE_METADATA + 64)		// Utiliser getpagesize() pour avoir le 4096 => l'ajouter dans la formule
 # define AREA_SMALL (((SMALL + SIZE_METADATA) * 101) + SIZE_METADATA + 640)
 # define MAGIC_NUMBER_BLOC 0x810C
 # define MAGIC_NUMBER_AREA 0x811C
