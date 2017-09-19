@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/19 09:53:26 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/19 12:32:48 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 14:58:12 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,18 @@ void		ft_add_to_last_area(t_metadata *start, t_metadata *new_area)
 		tmp = tmp->next;
 	tmp->next = new_area;
 	new_area->prev_area = tmp;
+}
+
+size_t		ft_area_init_size(int data_size)
+{
+	int		bloc_size;
+	int		factor;
+	int		minimum;
+
+	factor = 0;
+	bloc_size = data_size + SIZE_METADATA;
+	minimum = 100 * bloc_size;
+	while (factor * PAGE_SIZE < minimum)
+		factor++;
+	return (factor * PAGE_SIZE);
 }

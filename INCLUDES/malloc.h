@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/19 12:31:59 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/19 14:59:25 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@
 # define TINY 128
 # define SMALL 1024
 # define SIZE_METADATA sizeof(t_metadata)
-# define AREA_TINY (((TINY + SIZE_METADATA) * 106) + SIZE_METADATA + 64)		// Utiliser getpagesize() pour avoir le 4096 => l'ajouter dans la formule
-# define AREA_SMALL (((SMALL + SIZE_METADATA) * 101) + SIZE_METADATA + 640)
+# define AREA_TINY ft_area_init_size(TINY)
+# define AREA_SMALL ft_area_init_size(SMALL)
 # define MAGIC_NUMBER_BLOC 0x810C
 # define MAGIC_NUMBER_AREA 0x811C
+# define PAGE_SIZE getpagesize()
 
 /*
 ** size_total - 	BLOC : correspond a la taille effective du bloc.
@@ -82,5 +83,6 @@ int						ft_add_extra_bloc(void *ptr, size_t size,
 int						ft_calcul_size_available(t_metadata **next_bloc,
 	size_t *size_total, size_t size, t_metadata *bloc);
 void					*ft_new_allocation(void *ptr, size_t size);
+size_t			ft_area_init_size(int data_size);
 
 #endif
