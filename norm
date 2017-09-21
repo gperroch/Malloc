@@ -1,7 +1,5 @@
-Norme: ./SOURCES/dump_mem.c
-Error (line 22): line has 148 characters
-Norme: ./SOURCES/free.c
-Norme: ./SOURCES/ft_new_area.c
-Norme: ./SOURCES/malloc.c
-Norme: ./SOURCES/realloc.c
-Norme: ./SOURCES/show_alloc_mem.c
+Norme: ./SOURCES/main_test_malloc.c
+Error (line 21): C++ comment
+Norme: ./SOURCES/tests_charge_malloc.c
+Norme: ./SOURCES/tests_malloc.c
+Norme: ./SOURCES/tests_malloc_realloc.c

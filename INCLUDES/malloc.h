@@ -6,13 +6,14 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/14 15:05:50 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/19 15:01:08 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/21 09:51:39 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MALLOC_H
 # define MALLOC_H
 
+# include <limits.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
@@ -79,10 +80,32 @@ void					ft_init_new_area(t_metadata *new_area,
 void					ft_add_to_last_area(t_metadata *start,
 	t_metadata *new_area);
 int						ft_add_extra_bloc(void *ptr, size_t size,
-	size_t size_total,	t_metadata *bloc);
+	size_t size_total, t_metadata *bloc);
 int						ft_calcul_size_available(t_metadata **next_bloc,
 	size_t *size_total, size_t size, t_metadata *bloc);
 void					*ft_new_allocation(void *ptr, size_t size);
 size_t					ft_area_init_size(int data_size);
+int						test_malloc();
+int						test_malloc_free();
+int						test_malloc_realloc();
+int						test_malloc_free_realloc();
+int						test_realloc();
+int						test_realloc_free();
+int						test_charge(int isfree);
+int						sub_test_malloc_ok(void *ptr, long int size, int nbr);
+int						sub_test_malloc_ko(void *ptr, long int size, int nbr);
+void					sub_test_charge_one(int limit, size_t size, int isfree,
+	int nbr);
+void					sub_test_charge_two(int limit, size_t size, int isfree,
+	int nbr);
+int						sub_test_malloc_realloc_one(size_t first_size,
+	size_t new_size);
+int						sub_test_malloc_realloc_two(size_t first_size,
+	size_t new_size);
+int						sub_test_malloc_realloc_three(size_t first_size,
+	size_t new_size);
+int						sub_test_malloc_realloc_four(size_t first_size,
+	size_t new_size);
+void					execute_test(int code, char *label);
 
 #endif
