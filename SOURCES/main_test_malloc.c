@@ -6,7 +6,7 @@
 /*   By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/13 16:07:49 by gperroch          #+#    #+#             */
-/*   Updated: 2017/09/21 09:48:25 by gperroch         ###   ########.fr       */
+/*   Updated: 2017/09/21 10:06:19 by gperroch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int				main(void)
 	int			code;
 
 	execute_test(test_charge(1), "test_charge avec free");
-//	execute_test(test_charge(0), "test_charge sans free");
+	execute_test(test_charge(0), "test_charge sans free");
 	execute_test(test_malloc(), "test_malloc");
 	execute_test(test_malloc_free(), "test_malloc_free");
 	execute_test(test_malloc_realloc(), "test_malloc_realloc");

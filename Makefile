@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tpaulmye <tpaulmye@student.42.fr>          +#+  +:+       +#+         #
+#    By: gperroch <gperroch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2015/08/14 09:17:27 by tpaulmye          #+#    #+#              #
-#    Updated: 2017/09/19 14:55:22 by gperroch         ###   ########.fr        #
+#    Created: 2017/10/01 14:54:47 by gperroch          #+#    #+#              #
+#    Updated: 2017/10/01 14:54:48 by gperroch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,4 +65,4 @@ fclean: clean
 re: fclean all
 
 $(LIBFT):
-	make -j4 -C $(LIB_PATH)
+	make -C $(LIB_PATH)
